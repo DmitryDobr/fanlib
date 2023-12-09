@@ -1,0 +1,29 @@
+.Overview {
+    margin-top: 30px;
+    background-color: rgb(238, 234, 239);
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.Overview-title {
+    margin-bottom: 25px;
+    font-size: 30px;
+    color: black;
+}
+
+.Overview-about {
+    margin-top: 15px;
+}
+
+.Overview-abouttext {
+    max-height: 150px;
+    overflow: hidden;
+}
+
+.Overview-bigspan {
+    font-size: 20px;
+}
+
+.Overview-Character {
+    margin-right: 10px;
+}

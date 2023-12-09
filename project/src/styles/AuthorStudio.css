@@ -1,0 +1,135 @@
+.work-studio {
+    min-height: 100px;
+    background-color: #ebebe9;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.work-row1 {
+    display: flex;
+    column-gap: 10px;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-right: 15px;
+}
+
+.work-row2 {
+    display: flex;
+
+}
+
+.work-column {
+    width: 350px;
+    text-align: left;
+}
+
+.work-actions {
+    display: flex;
+    column-gap: 20px;
+    justify-content: space-between;
+}
+
+.AddChapter-button {
+    background-color: #cbcbc8;
+    border: none;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 10px;
+    /* width: 500px; */
+  }
+
+  .AddChapter-button:hover {
+    cursor: pointer;
+    background-color: #908f94;
+  }
+
+  .Chapters-studio {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+  }
+
+  .Chapters-studio-list {
+    padding: 15px 15px 0px 15px;
+  }
+
+  .Studio-Chapter {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .deletebtn:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: crimson;
+  }
+
+.filter {
+    /* border: 1px red solid; */
+    display: flex;
+    flex-direction: row;
+    column-gap: 20px;
+    align-items: center;
+    min-height: 70px;
+}
+
+.selected {
+    /* border: 1px red solid; */
+    min-height: 20px;
+    margin-bottom: 20px;
+
+    display: flex;
+    column-gap: 15px;
+}
+
+.Fandom-Select {
+    background-color: #ebebe9;
+    border-radius: 5px;
+    height: 35px;
+    width: min-content;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-wrap: nowrap;
+}
+
+.Fandom-Select:hover {
+    background-color: crimson;
+    cursor: pointer;
+}
+
+.filter-select {
+    border: none;
+    background-color: #b5b4b7;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    min-width: 100px;
+}
+
+.collection {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #46444c;
+    border-radius: 10px;
+}
+
+.collection-link {
+    color: white;
+}
+
+.collection-text {
+    color: white;
+}
+
+.delete-collection:hover {
+    color: crimson;
+    user-select: none;
+    cursor: pointer;
+}

@@ -1,0 +1,61 @@
+.EditForm {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 100px;
+}
+
+.EditForm-container {
+    width: 450px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    column-gap: 40px;
+    margin-bottom: 30px;
+}
+
+.EditForm-label {
+    min-width: 150px;
+}
+
+.EditForm-date {
+    background-color: #b5b4b7;
+    border-radius: 5px;
+    height: 35px;
+    border: none;
+    padding-left: 10px;
+    padding-right: 5px;
+    flex-grow: 1;
+}
+
+.EditForm-textarea {
+    resize: none;
+    margin-top: 20px;
+    margin-bottom: 50px;
+    background-color: #b5b4b7;
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    font-size: 20px;
+}
+
+.EditForm-textarea:focus {
+    border: none;
+    background-color: #e6e6e7;
+}
+
+.EditForm-text {
+    all: unset;
+    border: none;
+    background-color: #b5b4b7;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+    flex-grow: 1;
+}
+
+.EditForm-text:focus {
+    border: none;
+    background-color: #e6e6e7;
+}
