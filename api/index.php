@@ -255,7 +255,7 @@
 
             if (array_key_exists($key, $selectFunctions))
             {
-                $selectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+                $StudioselectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
                 $statusFlag = true;
             }
         }
@@ -270,6 +270,20 @@
             if (array_key_exists($key, $deleteFunctions))
             {
                 $deleteFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+                $statusFlag = true;
+            }
+        }
+    }
+    else if ($type == 'select') {
+        $QuerryType = $params[1];
+
+        if (isset($QuerryType))
+        {
+            $key = ''.$type.'/'.$QuerryType.'';
+
+            if (array_key_exists($key, $selectFunctions))
+            {
+                $selectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
                 $statusFlag = true;
             }
         }

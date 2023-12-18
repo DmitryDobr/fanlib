@@ -85,7 +85,7 @@ function n_AddChapter($db, $params) {
     }
 }
 
-// добавление нрвой работы
+// добавление новой работы
 function n_AddWork($db, $params) {
 
     // определение параметров работы и персонажей, связанных с ней
@@ -98,16 +98,15 @@ function n_AddWork($db, $params) {
     $result = pg_query($db, 'SELECT max("work_id") as max FROM "public"."WORK"');
     $new_id = pg_fetch_assoc($result)['max'] + 1;
 
-    pg_query($db, "BEGIN") or die("Could not start transaction\n");
+    pg_query($db, "BEGIN") or die("Could not start transaction\n"); // старт транзакции
 
     $querry = 'INSERT INTO "public"."WORK" ("work_id", "user_id", "WorkName", "about", "WORK_STATUS", "update_time") VALUES ($1, $2, $3, $4, $5, $6)';
     $result1 = pg_query_params($db, $querry, array($new_id, $user_id, $WorkName, $about, 1, date('j-m-y')));
     
-    if ($result1) {
+    if ($result1) { // получилось добавить в таблицу работ новую запись
         $flag = true;
 
-        foreach ($characters as $character)
-        {
+        foreach ($characters as $character) { // для каждого персонажа в полученном списке
             $buf_result = pg_query($db, 'SELECT max(ctw."CHAR_WORK_id") as max FROM "public"."CHARACTER-TO-WORK" as ctw');
             $new_id_ctw = pg_fetch_assoc($buf_result)['max'] + 1;
 
@@ -124,8 +123,8 @@ function n_AddWork($db, $params) {
             }
         }
 
-        if ($flag)
-        {
+        if ($flag) {
+            // все хорошечно
             pg_query($db, "COMMIT") or die("Transaction commit failed\n");
 
             $result_list = ["status" => true,
@@ -148,10 +147,55 @@ function n_AddWork($db, $params) {
     }  
 }
 
+// добавление работы в коллекцию
+function n_AddWorkCollection($db, $params) {
+    $flag_ok = false;
+
+    $user_id        = $params['user_id'];
+    $collection_id  = $params['collection_id'];
+    $work_id        = $params['work_id'];
+
+    $querry = 'SELECT collection_id as id FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id ='.$collection_id.'';
+    $result = pg_query($db, $querry);
+
+    if (pg_num_rows(($result)) == 1) // пользователь и коллекция связаны
+    {
+        $querry = 'SELECT id_collection as id FROM "public"."COLLECTION-TO-WORK" WHERE id_collection ='.$collection_id.' AND work_id='.$work_id.'';
+        $result = pg_query($db, $querry);
+
+        if (pg_num_rows(($result)) == 0) // работа и коллекция не связаны => можно добавить работу в коллекцию
+        {
+            $result = pg_query($db, 'SELECT max("COLL_WORK_id") as max FROM "public"."COLLECTION-TO-WORK"');
+            $new_id = pg_fetch_assoc($result)['max'] + 1;
+            
+            $querry = 'INSERT INTO "public"."COLLECTION-TO-WORK" ("COLL_WORK_id", "id_collection", "work_id") VALUES ($1, $2, $3)';
+            $result1 = pg_query_params($db, $querry, array($new_id, $collection_id, $work_id));
+
+            $state = pg_result_error($result1);  //  отлов ошибок выполнения запроса
+
+            if (empty($state) && $result1) {
+
+                $result_list = ["status" => true,
+                                "message" => "Add complete"];
+                echo json_encode($result_list);
+
+                $flag_ok = true;
+            }
+        }
+    }
+
+    if (!$flag_ok) {
+        $result_list = ["status" => false,
+                        "message" => "failed to add"];
+        echo json_encode($result_list);
+    }
+}
+
 $insertFunctions = [
     'insert/comment' => 'n_AddComment',
     'insert/chapter' => 'n_AddChapter',
     'insert/work' => 'n_AddWork',
+    'insert/workcollection' => 'n_AddWorkCollection',
 ]
 
 
