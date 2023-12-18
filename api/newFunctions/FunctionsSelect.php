@@ -153,11 +153,63 @@ function n_UserCollections($db, $params) {
     
 }
 
+function n_CollectionWorks($db, $params) {
+    // вывести список работ, входящих в коллекцию (нужен только id работы)
+    $collection_id = $params['collection_id'];
+    $user_id = $params['user_id'];
+
+    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id= '.$collection_id.'';
+    $result = pg_query($db, $querry);
+
+    if (pg_num_rows($result) > 0)
+    {
+        $querry = 'SELECT coltw.work_id, coltw."COLL_WORK_id" FROM "public"."COLLECTION" AS col ';
+        $querry = $querry . 'INNER JOIN "public"."COLLECTION-TO-WORK" AS coltw ';
+        $querry = $querry . 'ON coltw.id_collection = col.collection_id ';
+        $querry = $querry . 'WHERE col.collection_id = $1 AND col.id_user = $2 ORDER BY coltw.work_id DESC;';
+
+        $result = pg_query_params($db, $querry, array($collection_id, $user_id));
+
+        $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
+
+        if (empty($state))
+        {
+            $result_list = [];
+
+            while ($answer = pg_fetch_assoc($result)) {
+                $result_list[] = $answer;
+            }
+            
+            if (count($result_list) > 0)
+            {
+                echo json_encode($result_list);
+            }
+            else {
+                $result_list = ["status" => true,
+                                "message" => 'no works'];
+                echo json_encode($result_list);
+            }
+        }
+        else {
+            $result_list = ["status" => false,
+                            "message" => $state];
+            echo json_encode($result_list);
+        }
+    }
+    else
+    {
+        $result_list = ["status" => false,
+                        "message" => "cant get user"];
+        echo json_encode($result_list);
+    }
+    
+}
 
 $selectFunctions = [
     'studio/work' => 'n_WorkAuthorExist',
     'studio/chapter' => 'n_ChapterAuthorExist',
     'studio/collections' => 'n_UserCollections',
+    'studio/collectionWorks' => 'n_CollectionWorks',
 ]
 
 ?>

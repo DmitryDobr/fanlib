@@ -15,7 +15,7 @@ function GetNewAuthors($db){
 
 // получение информации об одном авторе
 function GetOneAuthor($db, $UserID, $withDate){
-    $result;
+    // $result;
 
     if (!$withDate)
         $result = pg_query($db, 'SELECT user_id, nickname, about FROM "public"."USER" WHERE "user_id" = '.$UserID.'');

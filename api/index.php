@@ -30,7 +30,7 @@
 	
 
 
-	$method = $_SERVER['REQUEST_METHOD'];
+	// $method = $_SERVER['REQUEST_METHOD'];
 	
 	$q = $_GET['q'];
 	$params = explode('/' , $q);
