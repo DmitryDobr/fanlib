@@ -23,7 +23,7 @@ const UserCollectionsPage = () => {
         }})
         .then((response) => {
             setCollections(response.data);
-            console.log(response.data)
+            // console.log(response.data)
         })
         .catch((error) => {
             if (isAxiosError(error))

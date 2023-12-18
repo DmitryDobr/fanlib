@@ -133,3 +133,24 @@
     user-select: none;
     cursor: pointer;
 }
+
+.CollectionPage-Works {
+    padding: 30px;
+}
+
+.CollectionPage-Work {
+    display: flex;
+    column-gap: 5px;
+}
+
+.CollectionPage-Del {
+    margin-top: 30px;
+    min-width: 60px;
+    background-color: #b5b4b7;
+    border-radius: 5px;
+}
+
+.CollectionPage-Del:hover {
+    background-color: crimson;
+    cursor: pointer;
+}
