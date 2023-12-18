@@ -220,3 +220,15 @@
   .Account-Menu:hover {
     cursor: pointer;
   }
+
+  .WorksList {
+    padding: 30px;
+    background-color: #c9c4ce;
+  }
+
+  .PageNavContainer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    column-gap: 40px;
+  }

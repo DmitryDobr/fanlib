@@ -57,7 +57,8 @@ function App() {
                 <Route index element={<Homepage />} />
 
                 {/* Страницы с списками/поиском работ */}
-                <Route path="works/new" element={<WorksPage />} />
+                <Route path="works/new" element={<WorksPage type={'new'}/>} />
+                <Route path="works/completed" element={<WorksPage type={'completed'}/>} />
 
                 {/* страницы отображения новых, популярных и рандомных авторов */}
                 <Route path="authors/new" element={<AutorsPage type="new"/>} />

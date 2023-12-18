@@ -13,7 +13,7 @@ class Header extends Component {
             links: [
                 {id: 0, name: "Новые работы", destination: "works/new"},
                 {id: 1, name: "Случайная работа", destination: "works/rand"},
-                {id: 2, name: "Завершенные", destination: "works/closed"},
+                {id: 2, name: "Завершенные", destination: "works/completed"},
                 {id: 3, name: "Поиск работ", destination: "works/search"},
                 {id: 4, name: "Создать работу", destination: "create/"}
             ],
@@ -38,7 +38,7 @@ class Header extends Component {
                             links: [
                                 {id: 0, name: "Новые работы", destination: "works/new"},
                                 {id: 1, name: "Случайная работа", destination: "works/rand"},
-                                {id: 2, name: "Завершенные", destination: "works/closed"},
+                                {id: 2, name: "Завершенные", destination: "works/completed"},
                                 {id: 3, name: "Поиск работ", destination: "works/search"},
                                 {id: 4, name: "Создать работу", destination: "create/"}
                             ]

@@ -72,3 +72,23 @@
     align-items: center;
     background-color: #d3c7dd;
 }
+
+.ReadWork-Title {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 20px;
+}
+
+
+.szh-menu-button {
+    width: 40px;
+    height: 30px;
+    border: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.szh-menu-button:hover {
+    cursor: pointer;
+    background-color: rgb(212, 212, 212);
+}

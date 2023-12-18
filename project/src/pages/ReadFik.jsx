@@ -10,7 +10,7 @@ import { useOutlet } from 'react-router-dom';
 import { Notfoundpage } from '../pages/NotFoundPage'
 
 import { AddComment } from '../hoc/AddComment';
-
+import { InsertWorkCollection } from '../hoc/insertWorkCollection';
 
 import ChaptersMenu from '../components/ReadWork/ChaptersMenu';
 
@@ -74,7 +74,10 @@ const ReadFikPage = () => {
                 <div className='content'>
                     <div className='ReadWork'>
                         <div className='ReadWork-Fragment1'>
-                            <div className='ReadWork-WorkName'>{workObject.WorkName}</div> 
+                            <div className='ReadWork-Title'>
+                                <span className='ReadWork-WorkName'>{workObject.WorkName}</span>
+                                <InsertWorkCollection WorkId={idWork} />
+                            </div> 
                             <div>
                                 <span>Автор: </span><Link to={`/author/${workObject.user_id}`}>{workObject.nickname}</Link>
                             </div>
@@ -103,7 +106,7 @@ const ReadFikPage = () => {
                             <button className='LoginForm-button' onClick={(event) => {
                                 let elem = document.getElementById(0);
                                 let state = elem.style.display; //смотрим, включен ли сейчас элемент
-                                if (state =='') elem.style.display='none'; //если включен, то выключаем
+                                if (state ==='') elem.style.display='none'; //если включен, то выключаем
                                 else elem.style.display=''; //иначе - включаем
                             }}>Показать/Скрыть</button>
                         </div>

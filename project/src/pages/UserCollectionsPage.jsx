@@ -4,7 +4,7 @@ import { useAuth } from '../hoc/useAuth'
 import { useState, useEffect } from "react"
 import axios, { isAxiosError } from "axios";
 
-import { WorkOverview } from '../components/WorkOverview';
+
 import { Link } from 'react-router-dom';
 
 import { useOutlet } from 'react-router-dom';
@@ -14,7 +14,7 @@ const UserCollectionsPage = () => {
     const outlet = useOutlet();
     const [collections, setCollections] = useState([]);
 
-    useEffect(() => loadCollections,[user.user_id])
+    useEffect(() => loadCollections,[user.user_id, outlet])
 
     async function loadCollections() {
         axios
