@@ -70,6 +70,7 @@ const EditChapterInfo = (props) => {
     let changes = {
         "chapter_name": 0,
         "chapter_text": 0,
+        "chaprer_number": 0,
     } // слежка за изменениями
     const [buttonDisable, setActivityChanged] = useState(true); // переключатель доступности кнопки
     const ElemUpdate = (event) => {
@@ -107,6 +108,14 @@ const EditChapterInfo = (props) => {
                             <input onChange={ElemUpdate} 
                                 className='EditForm-text' 
                                 name='chapter_name' defaultValue={chapterObject.chapter_name}>
+                            </input>
+                        </div>
+
+                        <div className='EditForm-container'>
+                            <label className='EditForm-label'>Номер главы:</label>
+                            <input type='number' onChange={ElemUpdate} 
+                                className='EditForm-text' 
+                                name='chapter_number' defaultValue={chapterObject.chapter_number}>
                             </input>
                         </div>
                         

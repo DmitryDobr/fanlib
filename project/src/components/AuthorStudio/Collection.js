@@ -1,7 +1,7 @@
 import React from 'react'
 
 import axios, {isAxiosError} from 'axios'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 import { useState } from 'react'
 import { useEffect } from 'react'
@@ -16,10 +16,12 @@ const Collection = () => {
 
     const {idCollection} = useParams()
     let [works, setWorks] = useState([]);
+    const [collectionname, setCollectionname] = useState('');
     
     let {user} = useAuth();
 
     useEffect(() => {loadWorks()}, [idCollection]);
+    useEffect(() => {loadCollection()}, [idCollection]);
 
     async function loadWorks() {
         axios
@@ -29,6 +31,24 @@ const Collection = () => {
         }})
         .then((response) => {
             setWorks(response.data);
+            // console.log(response.data)
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
+            }
+        });
+    }
+
+    async function loadCollection() {
+        axios
+        .post(`http://fanlib-api.ru/studio/collection`, null, {params: {
+            'user_id': user.user_id,
+            'collection_id': idCollection,
+        }})
+        .then((response) => {
+            setCollectionname(response.data[0].name);
             // console.log(response.data)
         })
         .catch((error) => {
@@ -66,7 +86,11 @@ const Collection = () => {
     {
         return (
             <div className='content'>
-                <h1>Collection {idCollection} {user.user_id}</h1>
+                {/* <h1>Collection {idCollection} {user.user_id}</h1> */}
+                <h1>{collectionname}</h1>
+
+                <Link to={'..'}>назад</Link>
+
                 <div className="CollectionPage-Works">
                     {
                         works.length > 0 ? (

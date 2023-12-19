@@ -52,6 +52,7 @@ function WorksPage (props) {
                         props.type === 'new' ? <>Новые работы</> : <>Завершенные работы</>
                     }
                 </h1>
+                
                 {
                     works !== undefined &&
                         works.map(el => (

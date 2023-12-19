@@ -5,18 +5,18 @@ function toPostgresArray($values) {
     $strArray = [];
     foreach ($values as $value) {
         if (is_int($value) || is_float($value)) {
-            // For integers and floats, we can simply use strval().
+            // число преобразуем как strval().
             $str = strval($value);
         } else if (is_string($value)) {
-            // For strings, we must first do some text escaping.
+            // для строк делаем.
             $value = str_replace('\\', '\\\\', $value);
             $value = str_replace('"', '\\"', $value);
             $str = '"' . $value . '"';
         } else if (is_bool($value)) {
-            // Convert the boolean value into a PostgreSQL constant.
+            // bool в PostgreSQL constant.
             $str = $value ? 'TRUE' : 'FALSE';
         } else if (is_null($value)) {
-            // Convert the null value into a PostgreSQL constant.
+            // null в PostgreSQL constant.
             $str = 'NULL';
         } else {
             throw new Exception('Unsupported data type encountered.');
@@ -130,7 +130,7 @@ function GetWorkByID($db, $WorkID) {
 
 // получить информацию о главах работы отдельным запросом
 function GetChaptersByWorkId($db, $WorkID) {
-    $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = '.$WorkID.' ORDER BY chapter_id DESC';
+    $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = '.$WorkID.' ORDER BY chapter_number DESC';
     $result = pg_query($db, $querry);
 
     $result_list = [];

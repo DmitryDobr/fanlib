@@ -24,7 +24,7 @@ const AddComment = (props) => {
             if (response.data.status === true)
             {
                 props.callback(WorkId);
-                form.commenttext.clear();
+                form.reset();
             }
             alert(response.data.message)
         })

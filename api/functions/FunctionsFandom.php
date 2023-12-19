@@ -5,6 +5,7 @@ $b = [];
 // поиск фандомов по названию
 function SearchForFandom($db, $SearchString){
 
+    // функция для перебора вариантов строки с апперкейсом и ловеркейсом
     function traverse($S, $idx) {
         if ($idx == mb_strlen($S)) {
             array_push($GLOBALS['b'],  $S);
@@ -25,16 +26,9 @@ function SearchForFandom($db, $SearchString){
 
     traverse(mb_strtolower($SearchString,"UTF-8"), 0);
 
-    // for ($i = 0; $i < count($GLOBALS['b']); $i++)
-    // {
-    //     echo $GLOBALS['b'][$i].' ';
-    // }
-    // поиск Фандомов
-    // ------------------------------------------------------------------------------------------------------------------------------
-    // $result = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.mb_strtolower($SearchString,"UTF-8").'%\' LIMIT 5');
-    // $result1 = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.mb_strtoupper($SearchString,"UTF-8").'%\' LIMIT 5');
     $result_list = [];
 
+    // для каждой найденной строки делаем запрос на поиск
     foreach ($GLOBALS['b'] as $value) {
         $result = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.$value.'%\' LIMIT 5');
 
@@ -49,48 +43,15 @@ function SearchForFandom($db, $SearchString){
         }
     }
 
-    if (count($result_list) > 0)
-    {
+    if (count($result_list) > 0) {
         echo json_encode($result_list);
     }
-    else
-    {
+    else {
         $res = [
             "status" => false,
             "message" => "Not found"
         ];
     }
-
-
-    // if (pg_num_rows($result) > 0) {
-    //     $result_list = [];
-
-    //     while ($answer = pg_fetch_assoc($result)) {
-    //         $answer += array("status" => true);
-    //         $result_list[] = $answer;
-    //     }
-
-    //     while ($answer = pg_fetch_assoc($result1)) {
-
-    //         $answer += array("status" => true);
-    //         if (!in_array($answer, $result_list))
-    //         {
-                
-    //             $result_list[] = $answer;
-    //         }
-    //     }
-        
-    //     echo json_encode($result_list);
-    // }
-    // else
-    // {
-    //     $res = [
-	// 		"status" => false,
-	// 		"message" => "Not found"
-	// 	];
-		
-	// 	echo json_encode($res);
-    // }
 }
 
 function GetFandomInfoById($db, $FandomId) {

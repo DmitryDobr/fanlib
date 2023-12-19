@@ -15,7 +15,7 @@ class Header extends Component {
                 {id: 1, name: "Случайная работа", destination: "works/rand"},
                 {id: 2, name: "Завершенные", destination: "works/completed"},
                 {id: 3, name: "Поиск работ", destination: "works/search"},
-                {id: 4, name: "Создать работу", destination: "create/"}
+                {id: 4, name: "Создать работу", destination: "studio/addwork"}
             ],
         }
     }
@@ -40,7 +40,7 @@ class Header extends Component {
                                 {id: 1, name: "Случайная работа", destination: "works/rand"},
                                 {id: 2, name: "Завершенные", destination: "works/completed"},
                                 {id: 3, name: "Поиск работ", destination: "works/search"},
-                                {id: 4, name: "Создать работу", destination: "create/"}
+                                {id: 4, name: "Создать работу", destination: "studio/addwork"}
                             ]
                         })
                     }}>Работы</div>

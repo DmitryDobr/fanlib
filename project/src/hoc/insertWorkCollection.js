@@ -11,23 +11,26 @@ const InsertWorkCollection = (props) => {
     var WorkId = props.WorkId
 
     const [collections, setCollections] = useState([]);
-    useEffect(() => loadCollections,[user.user_id])
+    useEffect(() => loadCollections,[user])
 
     async function loadCollections() {
-        axios
-        .post(`http://fanlib-api.ru/studio/collections`, null, {params: {
-            'user_id': user.user_id,
-        }})
-        .then((response) => {
-            setCollections(response.data);
-            // console.log(response.data)
-        })
-        .catch((error) => {
-            if (isAxiosError(error))
-            {
-                console.log(error.response.data.message);
-            }
-        });
+        if (user)
+        {
+            axios
+            .post(`http://fanlib-api.ru/studio/collections`, null, {params: {
+                'user_id': user.user_id,
+            }})
+            .then((response) => {
+                setCollections(response.data);
+                // console.log(response.data)
+            })
+            .catch((error) => {
+                if (isAxiosError(error))
+                {
+                    console.log(error.response.data.message);
+                }
+            });
+        }
     }
 
     async function addWorkCollection(collection_id) {

@@ -253,7 +253,7 @@
         {
             $key = ''.$type.'/'.$QuerryType.'';
 
-            if (array_key_exists($key, $selectFunctions))
+            if (array_key_exists($key, $StudioselectFunctions))
             {
                 $StudioselectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
                 $statusFlag = true;

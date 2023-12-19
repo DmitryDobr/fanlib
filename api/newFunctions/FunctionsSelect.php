@@ -13,6 +13,7 @@ function nn_CheckWorkAuthor($db, $UserID, $WorkId) {
     }
 }
 
+// работа принадлежит автору?
 function n_WorkAuthorExist($db, $params) {
 
     $UserID = $params['user_id'];
@@ -56,6 +57,7 @@ function n_WorkAuthorExist($db, $params) {
     
 }
 
+// глава есть в работе автора?
 function n_ChapterAuthorExist($db, $params) {
     
     $UserID     = $params['user_id'];
@@ -65,7 +67,7 @@ function n_ChapterAuthorExist($db, $params) {
 
     if (nn_CheckWorkAuthor($db, $UserID, $WorkId))
     {
-        $querry = 'SELECT chapter_text, chapter_name FROM "public"."CHAPTER" WHERE chapter_id = '.$ChapterId.' AND work_id = '.$WorkId.'';
+        $querry = 'SELECT chapter_text, chapter_name, chapter_number FROM "public"."CHAPTER" WHERE chapter_id = '.$ChapterId.' AND work_id = '.$WorkId.'';
         $result = pg_query($db, $querry);
 
         if (pg_num_rows($result) > 0) {
@@ -90,6 +92,7 @@ function n_ChapterAuthorExist($db, $params) {
     }
 }
 
+// вывод всех коллекций пользователя
 function n_UserCollections($db, $params) {
     //  ЭТО НЕ НУЖНО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     // НЕОБХОДИМО СГЕНЕРИРОВАТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЬСКОЙ КОЛЛЕКЦИИ
@@ -153,8 +156,60 @@ function n_UserCollections($db, $params) {
     
 }
 
+// вывод одной коллекции пользователя
+function n_UserCollection($db, $params) {
+
+    $user_id        = $params['user_id'];
+    $collection_id  = $params['collection_id'];
+
+    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id = '.$collection_id.'';
+    $result = pg_query($db, $querry);
+    
+    
+    if (pg_num_rows($result) > 0) {
+        $result_list = [];
+
+        while ($answer = pg_fetch_assoc($result)) {
+            $answer += array("status" => true);
+
+            $current_collection_id = $answer['id'];
+
+            $querry1 = 'SELECT count(ctw.work_id) as count FROM "public"."COLLECTION" as col INNER JOIN "public"."COLLECTION-TO-WORK" as ctw ';
+            $querry1 = $querry1 . 'ON col.collection_id = ctw.id_collection ';
+            $querry1 = $querry1 . 'WHERE ctw.id_collection = '.$current_collection_id.';';
+            $result1 = pg_query($db, $querry1);
+
+            $assoc = pg_fetch_assoc($result1);
+            
+            $answer += array("count" => $assoc['count']);
+
+            $result_list[] = $answer;
+        }
+
+        echo json_encode($result_list);
+    }
+    else {
+        http_response_code(403);
+
+        $res = [
+            "status" => false,
+            "message" => "No collections found"
+        ];
+        
+        echo json_encode($res);
+    }
+
+
+    // СТАРЫЙ SQL ЗАПРОС
+    // SELECT ctw.work_id FROM "public"."COLLECTION" as col INNER JOIN "public"."COLLECTION-TO-WORK" as ctw 
+    // ON col.collection_id = ctw.id_collection 
+    // WHERE ctw.id_collection = 3;
+    
+}
+
+// вывести список работ, входящих в коллекцию (нужен только id работы)
 function n_CollectionWorks($db, $params) {
-    // вывести список работ, входящих в коллекцию (нужен только id работы)
+    
     $collection_id = $params['collection_id'];
     $user_id = $params['user_id'];
 
@@ -205,6 +260,7 @@ function n_CollectionWorks($db, $params) {
     
 }
 
+// функции выбора работ
 function n_SelectWorks($db, $params) {
     $pagelen = 4;
     $pagecount = 0;
@@ -213,7 +269,7 @@ function n_SelectWorks($db, $params) {
     $page = $params['page'];
     $query = '';
     
-    if ($type == "new") {
+    if ($type == "new") { // новые работы
         $query = 'SELECT COUNT(*) as co FROM "public"."WORK"';
         $count = pg_fetch_assoc(pg_query($db, $query))['co'];
         $pagecount = round($count / $pagelen,0,PHP_ROUND_HALF_UP); // посчитали число страниц, которое может быть
@@ -224,7 +280,7 @@ function n_SelectWorks($db, $params) {
         $query = 'SELECT work_id FROM "public"."WORK" ORDER BY work_id DESC LIMIT '.$pagelen.' OFFSET '.(string)($pagelen*$page).';';    
     }
 
-    if ($type == "completed") {
+    if ($type == "completed") { // завершенные работы
         $query = 'SELECT COUNT(*) as co FROM "public"."WORK" WHERE "WORK_STATUS" = 2';
         $count = pg_fetch_assoc(pg_query($db, $query))['co'];
         $pagecount = round($count / $pagelen,0,PHP_ROUND_HALF_UP); // посчитали число страниц, которое может быть
@@ -260,6 +316,7 @@ $StudioselectFunctions = [
     'studio/work' => 'n_WorkAuthorExist',
     'studio/chapter' => 'n_ChapterAuthorExist',
     'studio/collections' => 'n_UserCollections',
+    'studio/collection' => 'n_UserCollection',
     'studio/collectionWorks' => 'n_CollectionWorks',
 ];
 

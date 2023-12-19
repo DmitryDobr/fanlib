@@ -53,11 +53,12 @@ function n_AddChapter($db, $params) {
         $result = pg_query($db, 'SELECT chapter_id FROM "public"."CHAPTER" ORDER BY chapter_id DESC LIMIT 1');
         $new_id = pg_fetch_assoc($result)['chapter_id'] + 1;
 
+        $result = pg_query($db, 'SELECT max(chapter_number) as mx FROM "public"."CHAPTER" WHERE work_id='.$params['work_id']);
+        $new_number = pg_fetch_assoc($result)['mx'] + 1;
 
-        $querry = 'INSERT INTO "public"."CHAPTER" (chapter_id, work_id, chapter_name) VALUES ($1, $2, $3)';
+        $querry = 'INSERT INTO "public"."CHAPTER" (chapter_id, work_id, chapter_name, chapter_number) VALUES ($1, $2, $3, $4)';
     
-        $result = pg_query_params($db, $querry, array($new_id, $params['work_id'], "Новая глава"));
-
+        $result = pg_query_params($db, $querry, array($new_id, $params['work_id'], "Новая глава",$new_number));
 
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
@@ -87,7 +88,6 @@ function n_AddChapter($db, $params) {
 
 // добавление новой работы
 function n_AddWork($db, $params) {
-
     // определение параметров работы и персонажей, связанных с ней
     $characters =   json_decode(file_get_contents('php://input'), true);
 
@@ -106,18 +106,18 @@ function n_AddWork($db, $params) {
     if ($result1) { // получилось добавить в таблицу работ новую запись
         $flag = true;
 
-        foreach ($characters as $character) { // для каждого персонажа в полученном списке
+        // для каждого персонажа в полученном списке
+        foreach ($characters as $character) {
             $buf_result = pg_query($db, 'SELECT max(ctw."CHAR_WORK_id") as max FROM "public"."CHARACTER-TO-WORK" as ctw');
-            $new_id_ctw = pg_fetch_assoc($buf_result)['max'] + 1;
+            $new_id_ctw = pg_fetch_assoc($buf_result)['max'] + 1; // определяем id
 
-            // echo $character['id_char'];
+            // добавляем персонажа в связку персонаж-работа
             $querry_ctw = 'INSERT INTO "public"."CHARACTER-TO-WORK" ("CHAR_WORK_id", "character_id", "work_id") VALUES ($1, $2, $3)';
             $result2 =  pg_query_params($db, $querry_ctw, array($new_id_ctw, $character['id_char'], $new_id));
 
-            if (!$result2) // не удалось записаться в связку персонаж-работа
-            {
+            // не удалось записаться в связку персонаж-работа
+            if (!$result2) {
                 $flag = false;
-                // echo "Rolling back transaction\n";
                 pg_query($db, "ROLLBACK") or die("Transaction rollback failed\n");
                 break;
             }

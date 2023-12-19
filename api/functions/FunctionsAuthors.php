@@ -2,7 +2,7 @@
 
 // получение новозарегистрированных авторов
 function GetNewAuthors($db){
-    $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" ORDER BY user_id DESC LIMIT 5' );
+    $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" ORDER BY user_id DESC' );
 	
     $result_list = [];
 
@@ -38,38 +38,6 @@ function GetOneAuthor($db, $UserID, $withDate){
 		
 		echo json_encode($res);
     }
-}
-
-function UpdateuserInfo($db, $UserId, $about, $birth, $nickname) {
-
-    $query = 'UPDATE "public"."USER" SET "birth" = $1, "about" = $2, "nickname" = $3 WHERE user_id= '.$UserId.'';
-    $result = pg_query_params($db, $query, array($birth, $about, $nickname));
-
-
-    $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
-
-    if (empty($state))
-    {
-        $result_list = ["status" => true,
-                        "message" => "Update complete"];
-        echo json_encode($result_list);
-    }
-    else
-    {
-        $result_list = ["status" => false,
-                        "message" => $state];
-        echo json_encode($result_list);
-    }
-
-    // UPDATE "USER" SET
-    // "user_id" = '2',
-    // "birth" = '1999-01-01',
-    // "about" = 'Привет :)
-    // Пишу детективные истории. В основном про расследование убийств. В данный момент пишу произведение "Второе письмо"',
-    // "email" = 'JohnDoe@mail.ru',
-    // "password" = '827ccb0eea8a706c4c34a16891f84e7b',
-    // "nickname" = 'John Doe'
-    // WHERE (("user_id" = '2'));
 }
 
 
