@@ -50,6 +50,11 @@ function route($db, $params, $key) {
     global $characterFunctions;
     if (array_key_exists($key, $characterFunctions)){
         $characterFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 

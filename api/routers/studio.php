@@ -268,6 +268,11 @@ function route($db, $params, $key) {
     global $StudioselectFunctions;
     if (array_key_exists($key, $StudioselectFunctions)){
         $StudioselectFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 

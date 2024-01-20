@@ -202,6 +202,11 @@ function route($db, $params, $key) {
     global $insertFunctions;
     if (array_key_exists($key, $insertFunctions)){
         $insertFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 

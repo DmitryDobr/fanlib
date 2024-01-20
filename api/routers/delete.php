@@ -90,6 +90,11 @@ function route($db, $params, $key) {
     global $deleteFunctions;
     if (array_key_exists($key, $deleteFunctions)){
         $deleteFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 

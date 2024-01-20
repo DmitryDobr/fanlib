@@ -102,6 +102,11 @@ function route($db, $params, $key) {
     global $updateFunctions;
     if (array_key_exists($key, $updateFunctions)){
         $updateFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
     }
 }
 
