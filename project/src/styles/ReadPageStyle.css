@@ -54,6 +54,7 @@
     padding-left: 20px;
     padding-right: 20px;
     white-space: pre-line;
+    word-wrap:break-word;
 }
 
 .comment {

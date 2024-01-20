@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom";
 
+import axios, {isAxiosError} from "axios";
+
 const AutorsPage = (props) => {
 
     let [authors, setAuthors] = useState([]);
@@ -9,20 +11,20 @@ const AutorsPage = (props) => {
     let Text = "";
 
     useEffect(() => {
-        if (props.type === "new")
-        {
-            fetch('http://fanlib-api.ru/users/new')
-            .then(res => res.json())
-            .then(data => setAuthors(data))
-        }
-        if (props.type === "popular")
-        {
-            setAuthors(null)
-        }
-        if (props.type === "random")
-        {
-            setAuthors(null)
-        }
+        axios
+        .post(`http://fanlib-api.ru/select/authors`,null,{params:{
+            'type': props.type,
+        }})
+        .then((response) => {
+            setAuthors(response.data)
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
+            }
+        });
+        
     }, [props])
 
 

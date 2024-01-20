@@ -254,7 +254,33 @@ function n_CollectionWorks($db, $params) {
     
 }
 
+// получение работ автора
+function n_getAllWorks($db, $params) {
+    $UserID = $params['user_id'];
 
+    $querry = 'SELECT work_id FROM "public"."WORK" WHERE user_id = '.$UserID.'ORDER BY work_id DESC';
+    $result = pg_query($db, $querry);
+
+    // echo pg_num_rows($result);
+
+    if (pg_num_rows($result) > 0)
+    {
+        $result_list = [];
+
+        while ($answer = pg_fetch_assoc($result)) {
+            $result_list[] = $answer;
+        }
+	
+		echo json_encode($result_list);
+    }
+    else {
+		$res = [
+			"message" => "No post"
+		];
+		
+		echo json_encode($res);
+    }
+}
 
 $StudioselectFunctions = [
     'work' => 'n_WorkAuthorExist',
@@ -262,6 +288,7 @@ $StudioselectFunctions = [
     'collections' => 'n_UserCollections',
     'collection' => 'n_UserCollection',
     'collectionWorks' => 'n_CollectionWorks',
+    'allworks' => 'n_getAllWorks',
 ];
 
 function route($db, $params, $key) {

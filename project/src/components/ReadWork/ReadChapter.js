@@ -18,7 +18,10 @@ const ReadChapter = () => {
 
     useEffect(() => {
         axios
-        .get(`http://fanlib-api.ru/read/${idWork}/chapter/${idChapter}`)
+        .post(`http://fanlib-api.ru/select/chapter`, null, {params: {
+            'WorkId': idWork,
+            'chapterId': idChapter
+        }})
         .then((response) => {
             setChapter(response.data[0])
         })
@@ -33,10 +36,8 @@ const ReadChapter = () => {
 
 
 
-    if (chapterObject !== undefined)
-    {
-        if (chapterObject.status !== false)
-        {
+    if (chapterObject !== undefined) {
+        if (chapterObject.status !== false) {
             return (
                 <>
                     <Link to='../'>Назад к оглавлению</Link>
@@ -48,8 +49,7 @@ const ReadChapter = () => {
                 </>
             )
         }
-        else
-        {
+        else {
             return(
                 <>
                     <div>Упс!! Глава не найдена</div>

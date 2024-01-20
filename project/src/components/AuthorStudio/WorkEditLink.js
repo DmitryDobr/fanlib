@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import axios, { isAxiosError } from "axios";
 
 
-
+// редактирование первичной информации работы в студии
+// удаление/добавление глав, переход на редактирование информации о работе/главах
 
 const WorkEditLink = (props) => {
 
@@ -13,6 +14,7 @@ const WorkEditLink = (props) => {
     useEffect(() => {loadWork()}, [props])
     useEffect(() => {loadChapters(props.WorkId)}, [props])
    
+    // добавление главы в работу
     async function AddWChapter(WorkId, UserId) {
 
         axios
@@ -33,6 +35,7 @@ const WorkEditLink = (props) => {
         });
     }
 
+    // прогрузка инфы о работе
     async function loadWork() {
         axios
         .post(`http://fanlib-api.ru/studio/work`, null, {params: {
@@ -47,9 +50,12 @@ const WorkEditLink = (props) => {
         });
     }
 
+    // загрузка глав работы
     async function loadChapters(WorkId) {
         axios
-        .get(`http://fanlib-api.ru/works/one/${WorkId}/chapters`)
+        .post(`http://fanlib-api.ru/select/workchapters`, null, {params: {
+            'WorkID': WorkId
+        }})
         .then((response) => {
             // console.log(response.data)
             setChapters(response.data)
@@ -62,6 +68,7 @@ const WorkEditLink = (props) => {
         });
     }
 
+    // удаление главы из работы
     async function deleteChapter(event) {
         event.preventDefault()
         const elem = event.target;

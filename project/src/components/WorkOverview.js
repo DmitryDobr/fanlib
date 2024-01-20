@@ -20,9 +20,12 @@ const WorkOverview = (props) => {
 
     let [workParams, setWorkParams] = useState([]);
 
+    // запрос на поиск всей инфы о работе (основная, персонажи => фандом)
     useEffect(() => {
         axios
-        .get(`http://fanlib-api.ru/works/one/${props.WorkId}`)
+        .post(`http://fanlib-api.ru/select/workfull`, null, {params: {
+            'WorkID': props.WorkId,
+        }})
         .then((response) => {
         setWorkParams(response.data[0]);
         })

@@ -24,17 +24,15 @@ export const AuthProvider = ({children}) => {
                 
                 console.log(response.data);
 
-                if (response.data.status)
-                {
+                if (response.data.status) {
                     setUser(response.data);
                     callback();
                     // alert("Залогинено");
                 }
-                else
-                {
+                else {
                     setUser(null);
                     // callback();
-                    alert("Пользователь не найден");
+                    alert("Ошибка авторизации");
                 }
             })
             .catch((error) => {
@@ -70,35 +68,35 @@ export const AuthProvider = ({children}) => {
         // console.log(email,password,username);
 
         axios
-            .post(`http://fanlib-api.ru/user/register`, null, { params: {
-                email: email,
-                password: password,
-                nickname: username,
-            }})
-            .then((response) => {
-                
-                console.log(response.data);
+        .post(`http://fanlib-api.ru/user/register`, null, { params: {
+            email: email,
+            password: password,
+            nickname: username,
+        }})
+        .then((response) => {
+            
+            console.log(response.data);
 
-                if (response.data.status)
-                {
-                    // setUser(response.data);
-                    signin(email, password, callback);
-                    // callback();
-                    // alert("Залогинено");
-                }
-                else
-                {
-                    setUser(null);
-                    // callback();
-                    // alert("Не удалось войти");
-                }
-            })
-            .catch((error) => {
-                if (isAxiosError(error))
-                {
-                    console.log(error.response.data.message);
-                }
-            });
+            if (response.data.status)
+            {
+                // setUser(response.data);
+                signin(email, password, callback);
+                // callback();
+                // alert("Залогинено");
+            }
+            else
+            {
+                setUser(null);
+                // callback();
+                alert("Не удалось зарегистрировать пользователя");
+            }
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
+            }
+        });
     }
 
     const value = {user, signin, signout, registrate}

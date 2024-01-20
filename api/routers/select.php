@@ -81,9 +81,21 @@ function n_SelectWorks($db, $params) {
         }
 
         $full_result += array("works" => $result_list);
+        $full_result += array("status" => true);
+        echo json_encode($full_result);
+    }
+    else {
+        // http_response_code(404);
+
+		$res = [
+			"status" => false,
+			"message" => "No post"
+		];
+		
+		echo json_encode($res);
     }
     
-    echo json_encode($full_result);
+    
 }
 
 // полуить инфу по работе по id работы

@@ -53,12 +53,14 @@ function WorksPage (props) {
                     }
                 </h1>
                 
-                {
-                    works !== undefined &&
+                <>
+                    {
+                        works !== undefined &&
                         works.map(el => (
                             <WorkOverview WorkId={el.work_id}/>
                         ))
-                }
+                    }
+                </>
 
                 <div className="PageNavContainer">
                     <button className="Input-button" onClick={() => {ChangePage(false)}}>Назад</button>

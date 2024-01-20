@@ -32,7 +32,7 @@ const FandomSearch = () => {
         if (fandomQuerry !== '')
         {
             axios
-            .post(`http://fanlib-api.ru/fandom/search`, null, { params: {
+            .post(`http://fanlib-api.ru/search/fandom`, null, { params: {
                 name: fandomQuerry,
             }})
             .then((response) => {
