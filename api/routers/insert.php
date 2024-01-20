@@ -158,8 +158,8 @@ function n_AddWorkCollection($db, $params) {
     $querry = 'SELECT collection_id as id FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id ='.$collection_id.'';
     $result = pg_query($db, $querry);
 
-    if (pg_num_rows(($result)) == 1) // пользователь и коллекция связаны
-    {
+    if (pg_num_rows(($result)) == 1) { // пользователь и коллекция связаны
+
         $querry = 'SELECT id_collection as id FROM "public"."COLLECTION-TO-WORK" WHERE id_collection ='.$collection_id.' AND work_id='.$work_id.'';
         $result = pg_query($db, $querry);
 
@@ -173,7 +173,7 @@ function n_AddWorkCollection($db, $params) {
 
             $state = pg_result_error($result1);  //  отлов ошибок выполнения запроса
 
-            if (empty($state) && $result1) {
+            if (empty($state)) {
 
                 $result_list = ["status" => true,
                                 "message" => "Add complete"];
@@ -192,12 +192,23 @@ function n_AddWorkCollection($db, $params) {
 }
 
 $insertFunctions = [
-    'insert/comment' => 'n_AddComment',
-    'insert/chapter' => 'n_AddChapter',
-    'insert/work' => 'n_AddWork',
-    'insert/workcollection' => 'n_AddWorkCollection',
-]
+    'comment' => 'n_AddComment',
+    'chapter' => 'n_AddChapter',
+    'work' => 'n_AddWork',
+    'workcollection' => 'n_AddWorkCollection',
+];
 
+function route($db, $params, $key) {
+    global $insertFunctions;
+    if (array_key_exists($key, $insertFunctions)){
+        $insertFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
 
 
 

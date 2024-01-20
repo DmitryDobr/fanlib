@@ -58,13 +58,14 @@ function n_UpdateChapter($db, $params) {
     // [1] - work_id
     // [2] - chapter_id
     // [3] - chapter_name
+    // [4] - chapter_number
 
     $text = json_decode(file_get_contents('php://input'), true)[0]["chapter_text"];
     // echo file_get_contents('php://input');
 
     if (CheckWorkAuthor($db, $params['user_id'], $params['work_id'])) {
-        $querry = 'UPDATE "public"."CHAPTER" SET "chapter_text" = $1, "chapter_name" = $2 WHERE "chapter_id" = '.$params['chapter_id'].'';
-        $result = pg_query_params($db, $querry, array($text, $params['chapter_name']));
+        $querry = 'UPDATE "public"."CHAPTER" SET "chapter_text" = $1, "chapter_name" = $2, "chapter_number" = $3 WHERE "chapter_id" = '.$params['chapter_id'].'';
+        $result = pg_query_params($db, $querry, array($text, $params['chapter_name'], $params['chapter_number']));
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
@@ -93,12 +94,21 @@ function n_UpdateChapter($db, $params) {
 
 
 $updateFunctions = [
-    'update/work' => 'n_UpdateWork',
-    'update/chapter' => 'n_UpdateChapter',
-]
+    'work' => 'n_UpdateWork',
+    'chapter' => 'n_UpdateChapter',
+];
 
-
-
+function route($db, $params, $key) {
+    global $updateFunctions;
+    if (array_key_exists($key, $updateFunctions)){
+        $updateFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
 
 
 ?>

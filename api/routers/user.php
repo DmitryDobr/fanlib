@@ -90,7 +90,7 @@ function n_registerUser($db, $params) {
     }
 }
 
-// получение информации об одном авторе
+// получение информации об авторе от имени самого автора
 function n_GetOneAuthor($db, $params){
 
     $withDate = true;
@@ -122,7 +122,7 @@ function n_GetOneAuthor($db, $params){
 
 // обновление информации о пользователе
 function n_UpdateuserInfo($db, $params) {
-
+    
     $UserId     = $params['user_id'];
     $about      = $params['about'];
     $birth      = $params['birth'];
@@ -133,14 +133,12 @@ function n_UpdateuserInfo($db, $params) {
 
     $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
-    if (empty($state))
-    {
+    if (empty($state)) {
         $result_list = ["status" => true,
                         "message" => "Update complete"];
         echo json_encode($result_list);
     }
-    else
-    {
+    else {
         $result_list = ["status" => false,
                         "message" => $state];
         echo json_encode($result_list);
@@ -158,14 +156,24 @@ function n_UpdateuserInfo($db, $params) {
 }
 
 
-
-
 $loginFunctions = [
-    'user/login' => 'n_CheckUser',
-    'user/register' => 'n_registerUser',
-    'user/userinfo' => 'n_GetOneAuthor',
-    'user/updateuserinfo' => 'n_UpdateuserInfo',
-]
+    'login' => 'n_CheckUser',
+    'register' => 'n_registerUser',
+    'userinfo' => 'n_GetOneAuthor',
+    'updateuserinfo' => 'n_UpdateuserInfo',
+];
 
+
+function route($db, $params, $key) {
+    global $loginFunctions;
+    if (array_key_exists($key, $loginFunctions)){
+        $loginFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
 
 ?>

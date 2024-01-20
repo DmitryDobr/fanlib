@@ -56,8 +56,7 @@ function n_DeleteWCollection($db, $params) {
     $querry = $querry . 'WHERE coltw."COLL_WORK_id" = '.$CWid.';';
     $result = pg_query($db, $querry);
 
-    if (pg_fetch_assoc($result)["id_user"] == $user_id)
-    {
+    if (pg_fetch_assoc($result)["id_user"] == $user_id) {
         $querry = 'DELETE FROM "public"."COLLECTION-TO-WORK" WHERE "COLL_WORK_id" = '.$CWid.';';
         $result = pg_query($db, $querry);
 
@@ -74,8 +73,7 @@ function n_DeleteWCollection($db, $params) {
             echo json_encode($result_list);
         }
     }
-    else
-    {
+    else {
         $result_list = ["status" => true,
                         "message" => "Delete cannot be provided"];
         echo json_encode($result_list);        
@@ -83,9 +81,23 @@ function n_DeleteWCollection($db, $params) {
 }
 
 $deleteFunctions = [
-    'delete/work' => 'n_DeleteWork',
-    'delete/chapter' => 'n_DeleteChapter',
-    'delete/workCollection' => 'n_DeleteWCollection',
-]
+    'work' => 'n_DeleteWork',
+    'chapter' => 'n_DeleteChapter',
+    'workCollection' => 'n_DeleteWCollection',
+];
+
+function route($db, $params, $key) {
+    global $deleteFunctions;
+    if (array_key_exists($key, $deleteFunctions)){
+        $deleteFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
+
+
 
 ?>

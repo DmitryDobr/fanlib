@@ -13,7 +13,7 @@ function nn_CheckWorkAuthor($db, $UserID, $WorkId) {
     }
 }
 
-// работа принадлежит автору?
+// работа автора сузествует? => отправляем инфу
 function n_WorkAuthorExist($db, $params) {
 
     $UserID = $params['user_id'];
@@ -65,8 +65,7 @@ function n_ChapterAuthorExist($db, $params) {
     $ChapterId  = $params['chapter_id'];
 
 
-    if (nn_CheckWorkAuthor($db, $UserID, $WorkId))
-    {
+    if (nn_CheckWorkAuthor($db, $UserID, $WorkId)) {
         $querry = 'SELECT chapter_text, chapter_name, chapter_number FROM "public"."CHAPTER" WHERE chapter_id = '.$ChapterId.' AND work_id = '.$WorkId.'';
         $result = pg_query($db, $querry);
 
@@ -94,12 +93,7 @@ function n_ChapterAuthorExist($db, $params) {
 
 // вывод всех коллекций пользователя
 function n_UserCollections($db, $params) {
-    //  ЭТО НЕ НУЖНО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    // НЕОБХОДИМО СГЕНЕРИРОВАТЬ ИНФОРМАЦИЮ О ПОЛЬЗОВАТЕЛЬСКОЙ КОЛЛЕКЦИИ
-    // и ДОБАВИТЬ ID РАБОТ В КОЛЛЕКЦИИ
-    //  => один элемент массива
-    // все пользовательские коллекции => массив => JSON => отправить
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     // Просто вывести саму коллекцию и число работ в ней
 
     $user_id = $params['user_id'];
@@ -260,64 +254,26 @@ function n_CollectionWorks($db, $params) {
     
 }
 
-// функции выбора работ
-function n_SelectWorks($db, $params) {
-    $pagelen = 4;
-    $pagecount = 0;
 
-    $type = $params['type'];
-    $page = $params['page'];
-    $query = '';
-    
-    if ($type == "new") { // новые работы
-        $query = 'SELECT COUNT(*) as co FROM "public"."WORK"';
-        $count = pg_fetch_assoc(pg_query($db, $query))['co'];
-        $pagecount = round($count / $pagelen,0,PHP_ROUND_HALF_UP); // посчитали число страниц, которое может быть
-
-        if ($count < $pagelen)
-            $pagecount = 1;
-
-        $query = 'SELECT work_id FROM "public"."WORK" ORDER BY work_id DESC LIMIT '.$pagelen.' OFFSET '.(string)($pagelen*$page).';';    
-    }
-
-    if ($type == "completed") { // завершенные работы
-        $query = 'SELECT COUNT(*) as co FROM "public"."WORK" WHERE "WORK_STATUS" = 2';
-        $count = pg_fetch_assoc(pg_query($db, $query))['co'];
-        $pagecount = round($count / $pagelen,0,PHP_ROUND_HALF_UP); // посчитали число страниц, которое может быть
-        if ($count < $pagelen)
-            $pagecount = 1;
-
-        $query = 'SELECT work_id FROM "public"."WORK" WHERE "WORK_STATUS" = 2 ORDER BY work_id DESC LIMIT '.$pagelen.' OFFSET '.(string)($pagelen*$page).';';    
-    }
-
-    $result = pg_query($db, $query);
-    
-    $full_result = [];
-    $full_result += array("pagecount" => $pagecount);
-
-    if (pg_num_rows($result) > 0) {
-        $result_list = [];
-
-        while ($answer = pg_fetch_assoc($result)) {
-            $result_list[] = $answer;
-        }
-
-        $full_result += array("works" => $result_list);
-    }
-    
-    echo json_encode($full_result);
-}
-
-$selectFunctions = [
-    'select/works' => 'n_SelectWorks',
-];
 
 $StudioselectFunctions = [
-    'studio/work' => 'n_WorkAuthorExist',
-    'studio/chapter' => 'n_ChapterAuthorExist',
-    'studio/collections' => 'n_UserCollections',
-    'studio/collection' => 'n_UserCollection',
-    'studio/collectionWorks' => 'n_CollectionWorks',
+    'work' => 'n_WorkAuthorExist',
+    'chapter' => 'n_ChapterAuthorExist',
+    'collections' => 'n_UserCollections',
+    'collection' => 'n_UserCollection',
+    'collectionWorks' => 'n_CollectionWorks',
 ];
+
+function route($db, $params, $key) {
+    global $StudioselectFunctions;
+    if (array_key_exists($key, $StudioselectFunctions)){
+        $StudioselectFunctions[$key]($db, $params);
+        return True;
+    }
+    else
+    {
+        return False;
+    }
+}
 
 ?>
