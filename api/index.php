@@ -19,14 +19,14 @@
 
 
     // "оптимизированный код"
-    require './Authentification/newAuth.php';
+    // require './Authentification/newAuth.php';
 
-    require './newFunctions/FunctionsUpdate.php';
-    require './newFunctions/FunctionsInsert.php';
-    require './newFunctions/FunctionsSelect.php';
-    require './newFunctions/FunctionsDelete.php';
+    // require './newFunctions/FunctionsUpdate.php';
+    // require './newFunctions/FunctionsInsert.php';
+    // require './newFunctions/FunctionsSelect.php';
+    // require './newFunctions/FunctionsDelete.php';
 
-    require './newFunctions/FunctionsCharacters.php';
+    // require './newFunctions/FunctionsCharacters.php';
 	
 
 
@@ -87,14 +87,14 @@
             // }
 
             // автор хочет получить расширенный доступ к работе
-            if ($SelectionType == "onAuthor") {
-                $statusFlag = true;
-				$WorkID = $_GET['work_id'];
-                $UserID = $_GET['user_id'];
+            // if ($SelectionType == "onAuthor") {
+            //     $statusFlag = true;
+			// 	$WorkID = $_GET['work_id'];
+            //     $UserID = $_GET['user_id'];
 
-                WorkAuthorExist($db, $UserID , $WorkID); // запрос автором информации о работе
-                return;
-            }
+            //     WorkAuthorExist($db, $UserID , $WorkID); // запрос автором информации о работе
+            //     return;
+            // }
 		}
 	}
 	else if ($type == "AuthorWorks"){
@@ -139,8 +139,7 @@
 
 		$WorkId = intval($params[1]);
 
-		if (isset($WorkId))
-		{
+		if (isset($WorkId)) {
 			$statusFlag = true;
 
             if (count($params) > 2)
@@ -187,107 +186,120 @@
             }            
         }
     }
-    else if ($type == "characters"){
-        $SelectionType = $params[1];
 
-        if (isset($SelectionType))
-        {
-            $key = ''.$type.'/'.$SelectionType.'';
 
-            if (array_key_exists($key, $characterFunctions))
-            {
-                $characterFunctions[$key]($db, $_GET);
-                $statusFlag = true;
-                return;
-            }
-        }
-    }
+    // else if ($type == "characters" || $type == 'select'){
+    //     $querryType = $params[1];
+
+    //     include_once './routers/' . $type . '.php';
+    //     route($db, $_GET, $querryType);
+    //     // if (isset($SelectionType))
+    //     // {
+    //     //     $key = ''.$type.'/'.$SelectionType.'';
+
+    //     //     if (array_key_exists($key, $characterFunctions))
+    //     //     {
+    //     //         $characterFunctions[$key]($db, $_GET);
+    //     $statusFlag = true;
+    //     //         return;
+    //     //     }
+    //     // }
+    // }
     
-    else if ($type == "update") {
-        $UpdateType = $params[1];
+    // else if ($type == "update") {
+    //     $UpdateType = $params[1];
 
-        if (isset($UpdateType))
-        {
-            $key = ''.$type.'/'.$UpdateType.'';
+    //     if (isset($UpdateType))
+    //     {
+    //         $key = ''.$type.'/'.$UpdateType.'';
 
-            if (array_key_exists($key, $updateFunctions))
-            {
-                $updateFunctions[$key]($db, $_GET);
-                $statusFlag = true;
-                return;
-            }
-        }
+    //         if (array_key_exists($key, $updateFunctions))
+    //         {
+    //             $updateFunctions[$key]($db, $_GET);
+    //             $statusFlag = true;
+    //             return;
+    //         }
+    //     }
+    // }
+    // else if ($type == "insert") {
+    //     $InsertType = $params[1];
+
+    //     if (isset($InsertType))
+    //     {
+    //         $key = ''.$type.'/'.$InsertType.'';
+
+    //         if (array_key_exists($key, $insertFunctions))
+    //         {
+    //             $insertFunctions[$key]($db, $_GET);
+    //             $statusFlag = true;
+    //         }
+    //     }
+    // }
+    // else if ($type == "user"){
+    //     $QuerryType = $params[1];
+
+    //     if (isset($QuerryType))
+    //     {
+    //         $key = ''.$type.'/'.$QuerryType.'';
+
+    //         if (array_key_exists($key, $loginFunctions))
+    //         {
+    //             $loginFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+    //             $statusFlag = true;
+    //         }
+    //     }
+    // }
+    // else if ($type == "studio") {
+    //     $QuerryType = $params[1];
+
+    //     if (isset($QuerryType))
+    //     {
+    //         $key = ''.$type.'/'.$QuerryType.'';
+
+    //         if (array_key_exists($key, $StudioselectFunctions))
+    //         {
+    //             $StudioselectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+    //             $statusFlag = true;
+    //         }
+    //     }
+    // }
+    // else if ($type == "delete") {
+    //     $QuerryType = $params[1];
+
+    //     if (isset($QuerryType))
+    //     {
+    //         $key = ''.$type.'/'.$QuerryType.'';
+
+    //         if (array_key_exists($key, $deleteFunctions))
+    //         {
+    //             $deleteFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+    //             $statusFlag = true;
+    //         }
+    //     }
+    // }
+
+    else {
+        $querryType = $params[1];
+
+        include_once './routers/' . $type . '.php';
+        route($db, $_GET, $querryType);
+
+        $statusFlag = true;
     }
-    else if ($type == "insert") {
-        $InsertType = $params[1];
+    // else if ($type == 'select') {
+    //     $QuerryType = $params[1];
 
-        if (isset($InsertType))
-        {
-            $key = ''.$type.'/'.$InsertType.'';
+    //     if (isset($QuerryType))
+    //     {
+    //         $key = ''.$type.'/'.$QuerryType.'';
 
-            if (array_key_exists($key, $insertFunctions))
-            {
-                $insertFunctions[$key]($db, $_GET);
-                $statusFlag = true;
-            }
-        }
-    }
-    else if ($type == "user"){
-        $QuerryType = $params[1];
-
-        if (isset($QuerryType))
-        {
-            $key = ''.$type.'/'.$QuerryType.'';
-
-            if (array_key_exists($key, $loginFunctions))
-            {
-                $loginFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
-                $statusFlag = true;
-            }
-        }
-    }
-    else if ($type == "studio") {
-        $QuerryType = $params[1];
-
-        if (isset($QuerryType))
-        {
-            $key = ''.$type.'/'.$QuerryType.'';
-
-            if (array_key_exists($key, $StudioselectFunctions))
-            {
-                $StudioselectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
-                $statusFlag = true;
-            }
-        }
-    }
-    else if ($type == "delete") {
-        $QuerryType = $params[1];
-
-        if (isset($QuerryType))
-        {
-            $key = ''.$type.'/'.$QuerryType.'';
-
-            if (array_key_exists($key, $deleteFunctions))
-            {
-                $deleteFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
-                $statusFlag = true;
-            }
-        }
-    }
-    else if ($type == 'select') {
-        $QuerryType = $params[1];
-
-        if (isset($QuerryType))
-        {
-            $key = ''.$type.'/'.$QuerryType.'';
-
-            if (array_key_exists($key, $selectFunctions))
-            {
-                $selectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
-                $statusFlag = true;
-            }
-        }
-    }
+    //         if (array_key_exists($key, $selectFunctions))
+    //         {
+    //             $selectFunctions[''.$type.'/'.$QuerryType.'']($db, $_GET);
+    //             $statusFlag = true;
+    //         }
+    //     }
+    // }
 	
 
 

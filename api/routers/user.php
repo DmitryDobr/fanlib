@@ -90,7 +90,7 @@ function n_registerUser($db, $params) {
     }
 }
 
-// получение информации об одном авторе
+// получение информации об авторе от имени самого автора
 function n_GetOneAuthor($db, $params){
 
     $withDate = true;
@@ -156,14 +156,19 @@ function n_UpdateuserInfo($db, $params) {
 }
 
 
-
-
 $loginFunctions = [
-    'user/login' => 'n_CheckUser',
-    'user/register' => 'n_registerUser',
-    'user/userinfo' => 'n_GetOneAuthor',
-    'user/updateuserinfo' => 'n_UpdateuserInfo',
-]
+    'login' => 'n_CheckUser',
+    'register' => 'n_registerUser',
+    'userinfo' => 'n_GetOneAuthor',
+    'updateuserinfo' => 'n_UpdateuserInfo',
+];
 
+
+function route($db, $params, $key) {
+    global $loginFunctions;
+    if (array_key_exists($key, $loginFunctions)){
+        $loginFunctions[$key]($db, $params);
+    }
+}
 
 ?>
