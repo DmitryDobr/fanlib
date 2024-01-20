@@ -1,0 +1,234 @@
+  @import url('./styles/AuthorsPageStyle.css');
+  @import url('./styles/WorkOverview.css');
+  @import url('./styles/ReadPageStyle.css');
+  @import url('./styles/SearchInputs.css');
+  @import url('./styles/FandomPageStyle.css');
+  @import url('./styles/EditForm.css');
+  @import url('./styles/AuthorStudio.css');
+  
+  p {
+    margin-top: 10px;
+    /* text-indent: 30px; */
+    line-height: 35px;
+  }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    background-color: rgb(222, 222, 218);
+  
+    /* text-align: center; */
+  }
+  
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+      monospace;
+  }
+  
+  .content {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  header, footer {
+    column-gap: 30px;
+    background-color: #2d2b34;
+    min-height: 70px;
+    color: azure;
+  }
+
+  header {
+    padding-top: 20px;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: center;
+    column-gap: 70px;
+    align-content: center;
+    height: 43px;
+    margin-bottom: 10px;
+  }
+
+  .header-top-element {
+    user-select: none;
+    width: 210px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .header-top-element:hover {
+    background-color: blueviolet;
+  }
+
+  .header-bottom {
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 43px;
+  }
+
+  .header-bottom-element {
+    width: 304px;
+    text-align: center;
+    color: aliceblue;
+    text-decoration: none;
+  }
+
+  .SiteTitle {
+    font-size: 30px;
+    user-select: none;
+    color: aliceblue;
+    font-style: italic;
+  }
+
+  .SiteTitle:hover {
+    cursor: pointer;
+    text-decoration: none;
+  }
+  
+  footer {
+    min-height: 100px;
+    padding-top: 20px;
+  }
+  
+  header > a {
+    color: azure;
+  }
+  
+  main {
+    min-height: 500px;
+  }
+  
+  a {
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .PageHref {
+    color: rgb(255, 0, 0);
+  }
+  
+  .HeaderHref {
+    color: azure;
+  }
+
+
+  .Copyright {
+    text-align: right;
+    font-style: italic;
+    font-weight: 100;
+  }
+
+  .header-nameMenu {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 20px;
+    align-items: center;
+  }
+
+
+
+  .LoginLink {
+    color: azure;
+  }
+
+  .LoginSpan:hover {
+    cursor: pointer;
+  }
+
+  .LoginLinkAccount {
+    color: azure;
+    margin-right: 10px;
+  }
+
+  .LoginForm {
+    margin: 0 auto;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    width: 350px;
+    background-color: #5e5d64;
+    padding: 40px;
+    padding-top: 25px;
+    padding-bottom: 50px;
+    border-radius: 25px;
+  }
+
+  .LoginForm-text {
+    all: unset;
+    border: none;
+    background-color: #b5b4b7;
+    height: 35px;
+    border-radius: 5px;
+    padding-left: 10px;
+    font-size: 20px;
+  }
+
+  .LoginForm-text:focus {
+    border: none;
+    background-color: #e6e6e7;
+  }
+
+  .LoginForm-button {
+    border: none;
+    height: 40px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: 15px;
+  }
+
+  .LoginForm-button:hover {
+    cursor: pointer;
+    background-color: #908f94;
+  }
+
+  .LoginForm-Title {
+    text-align: center;
+    color: azure;
+    font-weight: 500;
+    font-size: 30px;
+  }
+
+  .LoginForm-BottomText {
+    color:azure;
+  }
+  
+  .LoginForm-BottomLink {
+    color:rgb(181, 118, 240);
+  }
+
+  .LoginForm-BottomLink:hover {
+    cursor: pointer;
+    text-decoration:underline;
+  }
+
+  .Account-Menu{
+    margin-right: 30px;
+  }
+
+  .Account-Menu:hover {
+    cursor: pointer;
+  }
+
+  .WorksList {
+    padding: 30px;
+    background-color: #c9c4ce;
+  }
+
+  .PageNavContainer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    column-gap: 40px;
+  }

@@ -1,0 +1,42 @@
+.Input-form {
+    display: flex;
+    column-gap: 30px;
+    font-size: 20px;
+}
+
+.Input-text {
+    all: unset;
+    background-color: #cfcfcc;
+    border-radius: 10px;
+    height: 50px;
+    padding-left: 30px;
+    flex-grow: 1;
+}
+
+.Input-text:focus {
+    background-color: #efefe5;
+}
+
+.Input-button {
+    width: 170px;
+    border: none;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.Input-button:hover {
+    cursor: pointer;
+    background-color: rgb(212, 212, 212);
+}
+
+.SearchContainter {
+    margin-top: 30px;
+    padding-left: 30px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+.Search-link {
+    font-size: 20px;
+}

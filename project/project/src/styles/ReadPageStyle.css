@@ -1,0 +1,95 @@
+
+.ReadWork-WorkName {
+    font-size: 35px;
+    margin-bottom: 15px;
+}
+
+.ReadWork-BigText {
+    font-size: 28px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.ReadWork-Fragment1 {
+    background-color: rgb(171, 150, 190);
+    padding: 25px;
+    padding-bottom: 40px;
+}
+
+.ReadWork-Fragment2 {
+    background-color: rgb(201,196,206);
+    padding: 25px;
+    padding-bottom: 40px;
+    height: 100%;
+}
+
+.ReadWork-Fragment3 {
+    background-color: #ddd4e5;
+    padding: 25px;
+    padding-bottom: 40px;
+}
+
+.Chapter {
+    background-color: rgb(238,234,239);
+    border-radius: 10px;
+    height: 50px;
+    padding-top: 20px;
+    padding-left: 30px;
+    padding-right: 50px;
+    margin-bottom: 15px;
+    
+    display: flex;
+    justify-content:space-between;
+}
+
+.Chapter-Info {
+    display: flex;
+    column-gap: 15px;
+}
+
+.ReadWork-SmallText {
+    line-height: 35px;
+    /* text-indent: 30px; */
+    text-align: justify;
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: pre-line;
+    word-wrap:break-word;
+}
+
+.comment {
+    background-color: #d3ced7;
+    border-radius: 10px;
+    min-height: 70px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.ReadWork-CommentHeader {
+    height: 70px;
+    display: flex;
+    column-gap: 30px;
+    padding: 20px;
+    align-items: center;
+    background-color: #d3c7dd;
+}
+
+.ReadWork-Title {
+    display: flex;
+    justify-content: space-between;
+    column-gap: 20px;
+}
+
+
+.szh-menu-button {
+    width: 40px;
+    height: 30px;
+    border: none;
+    font-size: 15px;
+    border-radius: 10px;
+}
+
+.szh-menu-button:hover {
+    cursor: pointer;
+    background-color: rgb(212, 212, 212);
+}

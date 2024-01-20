@@ -1,0 +1,80 @@
+
+.AuthorsList-element {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-decoration: none;
+    color: black;
+}
+
+.AuthorsList-link {
+    color: black;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.AuthorPage {
+    background-color: rgb(201, 196, 206);
+    padding: 20px 35px 20px 30px;
+}
+
+.AuthorPage-Info {
+    min-height: 300px;
+}
+
+.AuthorPage-Nickname {
+    background-color: rgb(153, 135, 169);
+    min-height: 70px;
+    font-size: 38px;
+    padding-left: 30px;
+    padding-top: 30px;
+    font-style: italic;
+}
+
+.AuthorPage-About {
+    margin-bottom: 55px;
+}
+
+.AuthorPage-AboutText {
+    margin-top: 15px;
+    white-space: pre-wrap;
+}
+
+.AuthorPage-nav {
+    height: 50px;
+    display: flex;
+    background-color: rgb(141, 109, 171);
+    padding-left: 30px;
+    font-size: 20px;
+}
+
+.customlink {
+    max-height: inherit;
+    padding-top: 10px;
+    width: 200px;
+    text-align: center;
+    color: #000;
+}
+
+.customlink:hover {
+    text-decoration: none;
+    background-color: rgb(159, 98, 176);
+}
+
+/* .active-link {
+    max-height: inherit;
+    padding-top: 10px;
+    width: 200px;
+    text-align: center;
+    color: #000;
+    background-color: rgb(193, 137, 210);
+}
+
+.active-link:hover {
+    text-decoration: none;
+} */
+
+.AuthorPage-BigText {
+    all: unset;
+    font-size: 25px;
+    font-style: italic;
+}
