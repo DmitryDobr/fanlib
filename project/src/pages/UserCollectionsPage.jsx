@@ -16,6 +16,7 @@ const UserCollectionsPage = () => {
 
     useEffect(() => loadCollections,[user.user_id, outlet])
 
+    // прогрузка коллекций работ
     async function loadCollections() {
         axios
         .post(`http://fanlib-api.ru/studio/collections`, null, {params: {
@@ -29,6 +30,39 @@ const UserCollectionsPage = () => {
             if (isAxiosError(error))
             {
                 console.log(error.response.data.message);
+            }
+        });
+    }
+
+    // добавление коллекции
+    async function addCollection(event) {
+        event.preventDefault()
+        const form = event.target
+
+        const CollName = form.CollectionName.value // название новой коллекции
+        const userId = user.user_id // id пользователя
+
+        axios
+        .post(`http://fanlib-api.ru/insert/collection`, null, {params: {
+            user_id: userId ,
+            name: CollName,
+        }
+        })
+        .then((response) => {
+            // console.log(response.data);
+            alert(response.data.message)
+
+            if (response.data.status === true)
+            {
+                loadCollections();
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            if (isAxiosError)
+            {
+                // console.log(error.response.data);
+                alert(error.response.data.message)
             }
         });
     }
@@ -51,6 +85,10 @@ const UserCollectionsPage = () => {
                         ))
                     }
                 </div>
+                <form className='EditForm' onSubmit={addCollection}>
+                    <input className='EditForm-text' name="CollectionName" placeholder='Название новой коллекции'></input>
+                    <input className='LoginForm-button' type='submit' value={'Создать'}></input>
+                </form>
             </div>
         )
     }

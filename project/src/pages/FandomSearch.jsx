@@ -38,7 +38,7 @@ const FandomSearch = () => {
             .then((response) => {
                 setFandoms([]);
                 setFandoms(response.data);
-                // console.log(response.data);
+                console.log(response.data);
             })
             .catch((error) => {
                 if (isAxiosError(error))
