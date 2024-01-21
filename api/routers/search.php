@@ -7,13 +7,13 @@ function &n_traverse($S, $idx, &$c) {
         array_push($c,  $S);
         return;
     }
-    ttraverse($S, $idx + 1, $c);
+    n_traverse($S, $idx + 1, $c);
     $tt = mb_substr($S, $idx , 1);
     $T = mb_substr($S, $idx , 1);
     $T = mb_strtoupper($T, "UTF-8");
     $T = mb_convert_encoding($T, "UTF-8");
 
-    ttraverse(str_replace($tt, $T, $S), $idx + 1, $c);
+    n_traverse(str_replace($tt, $T, $S), $idx + 1, $c);
     return;
 }
 
@@ -24,14 +24,27 @@ function n_perebor($SearchString) {
 }
 
 
-function n_SearchForFandom($db, $SearchString) {
+function n_SearchForFandom($db, $params) {
+
+    $SearchString = $params['name'];
+    $flag_withzero = true;
+    if (isset($params['exclude']))
+    {
+        $flag_withzero = false;
+    }
+
     $srch = n_perebor($SearchString);
 
     $result_list = [];
 
     // для каждой найденной строки делаем запрос на поиск
     foreach ($srch as $value) {
-        $result = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.$value.'%\' LIMIT 5');
+        $result = '';
+
+        if ($flag_withzero)
+            $result = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.$value.'%\' LIMIT 5');
+        else
+            $result = pg_query($db, 'SELECT fandom_id, name FROM "public"."FANDOM" WHERE name LIKE \'%'.$value.'%\' AND fandom_id <> 0 LIMIT 5');
 
         if (pg_num_rows($result) > 0) {
             while ($answer = pg_fetch_assoc($result)) {
@@ -52,6 +65,8 @@ function n_SearchForFandom($db, $SearchString) {
             "status" => false,
             "message" => "Not found"
         ];
+
+        echo json_encode($res);
     }
 }
 
@@ -62,11 +77,11 @@ $searchFunctions = [
 
 function route($db, $params, $key) {
 
-    $SearchString = $params['name'];
+    // $SearchString = $params['name'];
 
     global $searchFunctions;
     if (array_key_exists($key, $searchFunctions)){
-        $searchFunctions[$key]($db, $SearchString);
+        $searchFunctions[$key]($db, $params);
         return True;
     }
     else

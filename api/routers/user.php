@@ -7,7 +7,10 @@ function n_CheckUser($db, $params){
     $login = $params['email'];
     $password = $params['password'];
 
-    $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" WHERE email=\''.$login.'\' AND password= \''.md5($password).'\'');
+    $query = 'SELECT user_id, nickname FROM "public"."USER" WHERE email=$1 AND password= $2;';
+
+    $result = pg_query_params($db, $query, array($login, md5($password)));
+    // $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" WHERE email=\''.$login.'\' AND password= \''.md5($password).'\'');
     // $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" WHERE email=\''.$login.'\'');
 
     if (pg_num_rows($result) == 1)
@@ -36,7 +39,9 @@ function n_registerUser($db, $params) {
     $password = $params['password'];
     $nickname = $params['nickname'];
 
-    $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" WHERE email=\''.$login.'\'');
+    $query = 'SELECT user_id, nickname FROM "public"."USER" WHERE email=$1';
+    $result = pg_query_params($db, $query, array($login));
+    // $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" WHERE email=\''.$login.'\'');
 
     if (pg_num_rows($result) > 0) { // если пользователь с данным email существует
         $result_list = ["status" => false,
@@ -57,8 +62,7 @@ function n_registerUser($db, $params) {
         $result = pg_query($db, 'SELECT max(collection_id) as mx FROM "public"."COLLECTION"');
         $new_col_id = pg_fetch_assoc($result)['mx'] + 1; // определение id коллекции
 
-        if (empty($state))
-        {
+        if (empty($state)) {
             // добавление обязательной коллекции пользователя
             $query = 'INSERT INTO "public"."COLLECTION" (collection_id, id_user, name) VALUES ($1, $2, $3)';
             $result = pg_query_params($db, $query, array($new_col_id, $new_id, 'Избранное'));
@@ -99,10 +103,12 @@ function n_GetOneAuthor($db, $params){
     $result = '';
 
     if (!$withDate)
-        $result = pg_query($db, 'SELECT user_id, nickname, about FROM "public"."USER" WHERE "user_id" = '.$UserID.'');
+        $result = pg_query_params($db, 'SELECT user_id, nickname, about FROM "public"."USER" WHERE "user_id" = $1',array($UserID));
     else
-        $result = pg_query($db, 'SELECT user_id, nickname, about, birth FROM "public"."USER" WHERE "user_id" = '.$UserID.'');
+        $result = pg_query_params($db, 'SELECT user_id, nickname, about, birth FROM "public"."USER" WHERE "user_id" = $1',array($UserID));
 
+
+        
     if (pg_num_rows($result) > 0) {
         $result = pg_fetch_assoc($result);
 	

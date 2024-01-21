@@ -5,11 +5,11 @@ function n_GetCharactersFromFandomById($db, $params) {
 
     $query = 'SELECT ctf.character_id, ch.character_name ';
     $query = $query . 'FROM "public"."CHARACTER-TO-FANDOM" ctf INNER JOIN "public"."CHARACTER" ch ';
-    $query = $query . 'ON ctf.character_id = ch.character_id WHERE ctf.fandom_id = '.$FandomId.' AND ctf.fandom_id > 0';
+    $query = $query . 'ON ctf.character_id = ch.character_id WHERE ctf.fandom_id = $1 AND ctf.fandom_id > 0';
 
     // echo $query;
 
-    $result = pg_query($db, $query);
+    $result = pg_query_params($db, $query, array($FandomId));
 
     if (pg_num_rows($result) > 0) {
         $result_list = [];

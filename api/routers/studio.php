@@ -156,8 +156,8 @@ function n_UserCollection($db, $params) {
     $user_id        = $params['user_id'];
     $collection_id  = $params['collection_id'];
 
-    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id = '.$collection_id.'';
-    $result = pg_query($db, $querry);
+    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = $1 AND collection_id = $2;';
+    $result = pg_query_params($db, $querry, array($user_id, $collection_id));
     
     
     if (pg_num_rows($result) > 0) {
@@ -170,8 +170,8 @@ function n_UserCollection($db, $params) {
 
             $querry1 = 'SELECT count(ctw.work_id) as count FROM "public"."COLLECTION" as col INNER JOIN "public"."COLLECTION-TO-WORK" as ctw ';
             $querry1 = $querry1 . 'ON col.collection_id = ctw.id_collection ';
-            $querry1 = $querry1 . 'WHERE ctw.id_collection = '.$current_collection_id.';';
-            $result1 = pg_query($db, $querry1);
+            $querry1 = $querry1 . 'WHERE ctw.id_collection = $1;';
+            $result1 = pg_query_params($db, $querry1, array($current_collection_id));
 
             $assoc = pg_fetch_assoc($result1);
             
@@ -207,11 +207,10 @@ function n_CollectionWorks($db, $params) {
     $collection_id = $params['collection_id'];
     $user_id = $params['user_id'];
 
-    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id= '.$collection_id.'';
-    $result = pg_query($db, $querry);
+    $querry = 'SELECT collection_id as id, name  FROM "public"."COLLECTION" WHERE id_user = $1 AND collection_id= $2';
+    $result = pg_query_params($db, $querry, array($user_id, $collection_id));
 
-    if (pg_num_rows($result) > 0)
-    {
+    if (pg_num_rows($result) > 0) {
         $querry = 'SELECT coltw.work_id, coltw."COLL_WORK_id" FROM "public"."COLLECTION" AS col ';
         $querry = $querry . 'INNER JOIN "public"."COLLECTION-TO-WORK" AS coltw ';
         $querry = $querry . 'ON coltw.id_collection = col.collection_id ';
@@ -221,16 +220,14 @@ function n_CollectionWorks($db, $params) {
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
-        if (empty($state))
-        {
+        if (empty($state)) {
             $result_list = [];
 
             while ($answer = pg_fetch_assoc($result)) {
                 $result_list[] = $answer;
             }
             
-            if (count($result_list) > 0)
-            {
+            if (count($result_list) > 0) {
                 echo json_encode($result_list);
             }
             else {
@@ -245,8 +242,7 @@ function n_CollectionWorks($db, $params) {
             echo json_encode($result_list);
         }
     }
-    else
-    {
+    else {
         $result_list = ["status" => false,
                         "message" => "cant get user"];
         echo json_encode($result_list);
@@ -254,7 +250,32 @@ function n_CollectionWorks($db, $params) {
     
 }
 
+// получение работ автора
+function n_getAllWorks($db, $params) {
+    $UserID = $params['user_id'];
 
+    $querry = 'SELECT work_id FROM "public"."WORK" WHERE user_id = $1 ORDER BY work_id DESC';
+    $result = pg_query_params($db, $querry, array($UserID));
+
+    // echo pg_num_rows($result);
+
+    if (pg_num_rows($result) > 0) {
+        $result_list = [];
+
+        while ($answer = pg_fetch_assoc($result)) {
+            $result_list[] = $answer;
+        }
+	
+		echo json_encode($result_list);
+    }
+    else {
+		$res = [
+			"message" => "No post"
+		];
+		
+		echo json_encode($res);
+    }
+}
 
 $StudioselectFunctions = [
     'work' => 'n_WorkAuthorExist',
@@ -262,6 +283,7 @@ $StudioselectFunctions = [
     'collections' => 'n_UserCollections',
     'collection' => 'n_UserCollection',
     'collectionWorks' => 'n_CollectionWorks',
+    'allworks' => 'n_getAllWorks',
 ];
 
 function route($db, $params, $key) {

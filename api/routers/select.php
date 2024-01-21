@@ -81,9 +81,21 @@ function n_SelectWorks($db, $params) {
         }
 
         $full_result += array("works" => $result_list);
+        $full_result += array("status" => true);
+        echo json_encode($full_result);
+    }
+    else {
+        // http_response_code(404);
+
+		$res = [
+			"status" => false,
+			"message" => "No post"
+		];
+		
+		echo json_encode($res);
     }
     
-    echo json_encode($full_result);
+    
 }
 
 // полуить инфу по работе по id работы
@@ -93,9 +105,11 @@ function n_GetWorkInfoByID($db, $params) {
     // ЗАПРОС ИНФЫ О РАБОТЕ И ИМЕНИ АВТОРА
     $querry = 'WITH TempUser AS (SELECT user_id, nickname FROM "public"."USER")';
     $querry = $querry . ' SELECT * FROM "public"."WORK" LEFT JOIN TempUser tm USING(user_id)';
-    $querry = $querry . ' WHERE work_id = '.$WorkID.'';
+    $querry = $querry . ' WHERE work_id = $1';
 
-    $result = pg_query($db, $querry);
+    $result = pg_prepare($db, "querry1", $querry);
+    $result = pg_execute($db, "querry1", array($WorkID));
+    // $result = pg_query_params($db, $querry, array($WorkID));
 
     if (pg_num_rows($result) > 0) {
         $result_list = [];
@@ -105,8 +119,12 @@ function n_GetWorkInfoByID($db, $params) {
         }
 
         // ЗАПРОС СПИСКА ГЛАВ РАБОТЫ
-        $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = '.$WorkID.' ORDER BY chapter_id';
-        $result = pg_query($db, $querry);
+        $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = $1 ORDER BY chapter_id';
+
+        $result = pg_prepare($db, "querry2", $querry);
+        $result = pg_execute($db, "querry2", array($WorkID));
+        
+        // $result = pg_query_params($db, $querry, array($WorkID));
         $chapter_list = [];
 
         $num = 0;
@@ -122,7 +140,7 @@ function n_GetWorkInfoByID($db, $params) {
         echo json_encode($result_list);
     }
     else {
-		http_response_code(404);
+		http_response_code(424);
 
 		$res = [
 			"status" => false,
@@ -143,18 +161,16 @@ function n_GetChapterInfoById($db,$params) {
     $chapterId  = $params['chapterId'];
     $WorkId     = $params['WorkId'];
 
-    $querry = 'SELECT * FROM "public"."CHAPTER" WHERE chapter_id = '.$chapterId.' AND work_id = '.$WorkId.'';
-    $result = pg_query($db, $querry);
+    $querry = 'SELECT * FROM "public"."CHAPTER" WHERE chapter_id = $1 AND work_id = $2';
+    $result = pg_query_params($db, $querry, array($chapterId, $WorkId));
 
     $result_list = [];
 
-    while ($answer = pg_fetch_assoc($result)) 
-    {
+    while ($answer = pg_fetch_assoc($result)) {
         $result_list[] = $answer;
     }
 
-    if (count($result_list) > 0)
-    {
+    if (count($result_list) > 0) {
         echo json_encode($result_list);
     }
     else {
@@ -177,8 +193,8 @@ function n_GetChaptersByWorkId($db, $params) {
 
     $WorkID = $params['WorkID'];
 
-    $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = '.$WorkID.' ORDER BY chapter_number DESC';
-    $result = pg_query($db, $querry);
+    $querry = 'SELECT chapter_id, chapter_name FROM "public"."CHAPTER" WHERE work_id = $1 ORDER BY chapter_number DESC';
+    $result = pg_query_params($db, $querry, array($WorkID));
 
     $result_list = [];
 
@@ -196,9 +212,9 @@ function n_GetWorkCommentsById($db, $params) {
 
     $querry = 'SELECT us.nickname, comm.text, comm.comment_id, comm.id_user ';
     $querry = $querry . 'FROM "public"."COMMENT" as comm LEFT JOIN "public"."USER" as us ';
-    $querry = $querry . 'ON comm.id_user = us.user_id WHERE comm.id_work='.$WorkID.' ORDER BY comm.comment_id DESC;';
+    $querry = $querry . 'ON comm.id_user = us.user_id WHERE comm.id_work= $1 ORDER BY comm.comment_id DESC;';
 
-    $result = pg_query($db, $querry);
+    $result = pg_query_params($db, $querry, array($WorkID));
 
     $result_list = [];
 
@@ -222,9 +238,9 @@ function n_GetWorkAllInfoById($db, $params) {
     // ОСНОВНАя ИНФОРМАЦИя О РАБОТЕ
     $querry = 'WITH TempUser AS (SELECT user_id, nickname FROM "public"."USER")';
     $querry = $querry . ' SELECT * FROM "public"."WORK" LEFT JOIN TempUser tm USING(user_id)';
-    $querry = $querry . ' WHERE work_id = '.$WorkID.'';
+    $querry = $querry . ' WHERE work_id = $1';
 
-    $result = pg_query($db, $querry);
+    $result = pg_query_params($db, $querry, array($WorkID));
 
     $result_list = [];
     while ($answer = pg_fetch_assoc($result)) {
@@ -234,11 +250,11 @@ function n_GetWorkAllInfoById($db, $params) {
     // --------------------------------------------------------------
     // ИНФОРМАЦИя О ПЕРСОНАЖАХ В РАБОТЕ
     $querry = 'SELECT ctw.character_id, ch.character_name FROM "public"."CHARACTER-TO-WORK" as ctw ';
-    $querry = $querry . 'LEFT JOIN "public"."CHARACTER" as ch ON ctw.character_id=ch.character_id WHERE ctw.work_id = '.$WorkID.'';
+    $querry = $querry . 'LEFT JOIN "public"."CHARACTER" as ch ON ctw.character_id=ch.character_id WHERE ctw.work_id = $1';
     
     // echo $querry;
 
-    $result = pg_query($db, $querry);
+    $result = pg_query_params($db, $querry, array($WorkID));
 
     $char_list = []; // список на присоединение к результирующему набору
     $char_id = []; // список с id персонажей для дальнейших действий
@@ -295,7 +311,7 @@ function n_GetWorkAllInfoById($db, $params) {
 function n_GetOneAuthor($db, $params) {
     // $result;
     $UserID = $params['UserID'];
-    $result = pg_query($db, 'SELECT user_id, nickname, about FROM "public"."USER" WHERE "user_id" = '.$UserID.'');
+    $result = pg_query_params($db, 'SELECT user_id, nickname, about FROM "public"."USER" WHERE "user_id" = $1',array($UserID));
 
     if (pg_num_rows($result) > 0) {
         $result = pg_fetch_assoc($result);
@@ -317,8 +333,7 @@ function n_GetOneAuthor($db, $params) {
 function n_GetAuthors($db, $params){
     $type = $params['type'];
 
-    if ($type === 'new')
-    {
+    if ($type === 'new') {
         $result = pg_query($db, 'SELECT user_id, nickname FROM "public"."USER" ORDER BY user_id DESC' );
     }
 	
@@ -336,10 +351,9 @@ function n_GetFandomInfoById($db, $params) {
     $FandomId = $params['FandomId'];
     // информация по фандому по его идентификатору
     // -------------------------------------------------------------------------------------------
-    $result = pg_query($db, 'SELECT * FROM "public"."FANDOM" WHERE fandom_id = '.$FandomId);
+    $result = pg_query_params($db, 'SELECT * FROM "public"."FANDOM" WHERE fandom_id = $1', array($FandomId));
 
-    if (pg_num_rows($result) > 0)
-    {
+    if (pg_num_rows($result) > 0) {
         $result_list = [];
 
         while ($answer = pg_fetch_assoc($result)) {
@@ -348,9 +362,8 @@ function n_GetFandomInfoById($db, $params) {
         
         echo json_encode($result_list);
     }
-    else
-    {
-        http_response_code(404);
+    else {
+        http_response_code(424);
 
         $res = [
 			"status" => false,

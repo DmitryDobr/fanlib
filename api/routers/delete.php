@@ -6,8 +6,8 @@ function n_DeleteChapter($db, $params) {
     $WorkId     = $params['work_id'];
     $ChapterId  = $params['chapter_id'];
 
-    $querry = 'DELETE FROM "public"."CHAPTER" WHERE chapter_id = '.$ChapterId.' AND work_id = '.$WorkId.';';
-    $result = pg_query($db, $querry);
+    $querry = 'DELETE FROM "public"."CHAPTER" WHERE chapter_id = $1 AND work_id = $2;';
+    $result = pg_query_params($db, $querry, array($ChapterId, $WorkId));
 
     $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
@@ -28,8 +28,8 @@ function n_DeleteWork($db, $params) {
     $UserId     = $params['user_id'];
     $WorkId     = $params['work_id'];
 
-    $querry = 'DELETE FROM "public"."WORK" WHERE user_id = '.$UserId.' AND work_id = '.$WorkId.';';
-    $result = pg_query($db, $querry);
+    $querry = 'DELETE FROM "public"."WORK" WHERE user_id = $1 AND work_id = $2;';
+    $result = pg_query_params($db, $querry, array($UserId, $WorkId));
 
     $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
@@ -53,12 +53,12 @@ function n_DeleteWCollection($db, $params) {
     $querry = 'SELECT col.id_user FROM "public"."COLLECTION" AS col ';
     $querry = $querry . 'INNER JOIN "public"."COLLECTION-TO-WORK" AS coltw ';
     $querry = $querry . 'ON coltw.id_collection = col.collection_id ';
-    $querry = $querry . 'WHERE coltw."COLL_WORK_id" = '.$CWid.';';
-    $result = pg_query($db, $querry);
+    $querry = $querry . 'WHERE coltw."COLL_WORK_id" = $1;';
+    $result = pg_query_params($db, $querry, array($CWid));
 
     if (pg_fetch_assoc($result)["id_user"] == $user_id) {
-        $querry = 'DELETE FROM "public"."COLLECTION-TO-WORK" WHERE "COLL_WORK_id" = '.$CWid.';';
-        $result = pg_query($db, $querry);
+        $querry = 'DELETE FROM "public"."COLLECTION-TO-WORK" WHERE "COLL_WORK_id" = $1;';
+        $result = pg_query_params($db, $querry, array($CWid));
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
