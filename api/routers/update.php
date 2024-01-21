@@ -63,7 +63,7 @@ function n_UpdateChapter($db, $params) {
     $text = json_decode(file_get_contents('php://input'), true)[0]["chapter_text"];
     // echo file_get_contents('php://input');
 
-    if (CheckWorkAuthor($db, $params['user_id'], $params['work_id'])) {
+    if (n_CheckWorkAuthor($db, $params['user_id'], $params['work_id'])) {
         $querry = 'UPDATE "public"."CHAPTER" SET "chapter_text" = $1, "chapter_name" = $2, "chapter_number" = $3 WHERE "chapter_id" = '.$params['chapter_id'].'';
         $result = pg_query_params($db, $querry, array($text, $params['chapter_name'], $params['chapter_number']));
 
