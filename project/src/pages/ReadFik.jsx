@@ -29,9 +29,7 @@ const ReadFikPage = () => {
     // запрос на получение инфы с сервера о работе
     useEffect(() => {
         axios
-        .post(`http://fanlib-api.ru/select/work`, null, {params:{
-            'work_id': idWork,
-        }})
+        .get(`http://fanlib-api.ru/select/work?work_id=${idWork}`)
         .then((response) => {
             if (response.data.length > 0)
             {
@@ -55,9 +53,7 @@ const ReadFikPage = () => {
     // Загрузка комментов
     async function loadComments(WorkId) {
         axios
-        .post(`http://fanlib-api.ru/select/comments`, null, {params: {
-            'WorkID': WorkId,
-        }})
+        .get(`http://fanlib-api.ru/select/comments?WorkID=${WorkId}`)
         .then((response) => {
             // console.log(response.data)
             setComments(response.data);

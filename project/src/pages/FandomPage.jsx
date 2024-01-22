@@ -20,9 +20,7 @@ const FandomPage = () => {
 
     useEffect(() => {
         axios
-        .post(`http://fanlib-api.ru/select/fandom`, null, {params:{
-            'FandomId': idFandom,
-        }})
+        .get(`http://fanlib-api.ru/select/fandom?FandomId=${idFandom}`, null, {params:{}})
         .then((response) => {
             setFandom(response.data[0]);
             // console.log(response.data[0]);

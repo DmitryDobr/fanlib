@@ -34,16 +34,21 @@ const InsertWorkCollection = (props) => {
     }
 
     async function addWorkCollection(collection_id) {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user.user_id);
+        bodyFormData.append('collection_id', collection_id);
+        bodyFormData.append('work_id', WorkId);
+
         axios
-        .post(`http://fanlib-api.ru/insert/workcollection`, null, {params: {
-            'user_id': user.user_id,
-            'collection_id': collection_id,
-            'work_id': WorkId,
-        }})
+        .post(`http://fanlib-api.ru/insert/workcollection`, bodyFormData, {params: {}})
         .then((response) => {
             if (response.data.status === true)
             {
                 alert(response.data.message)
+            }
+            else
+            {
+                alert('Работа уже в данной коллекции')
             }
         })
         .catch((error) => {

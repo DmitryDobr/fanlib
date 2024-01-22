@@ -16,7 +16,7 @@ const EditChapterInfo = (props) => {
     let {user} = useAuth();
 
     let [chapterObject, setChapter] = useState([]);
-    useEffect(() => {loadChapter(props.WorkId)}, [props])
+    useEffect(() => {loadChapter()}, [])
     
     async function loadChapter() {
         axios
@@ -36,7 +36,8 @@ const EditChapterInfo = (props) => {
         })
         .catch((error) => {
             setChapter(error.response.data);
-            console.log(error.response.data.message);
+            if (isAxiosError)
+                console.log(error.response.data.message);
         });
     }
 
@@ -75,7 +76,9 @@ const EditChapterInfo = (props) => {
         "chapter_text": 0,
         "chaprer_number": 0,
     } // слежка за изменениями
+    
     const [buttonDisable, setActivityChanged] = useState(true); // переключатель доступности кнопки
+    
     const ElemUpdate = (event) => {
         event.preventDefault()
         const elem = event.target;

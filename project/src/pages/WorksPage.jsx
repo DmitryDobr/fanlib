@@ -13,10 +13,7 @@ function WorksPage (props) {
 
     async function loadWorks() {
         axios
-        .post(`http://fanlib-api.ru/select/works`,null,{params:{
-            'type': props.type,
-            'page': current_page,
-        }})
+        .get(`http://fanlib-api.ru/select/works?type=${props.type}&page=${current_page}`,null,{params:{}})
         .then((response) => {
             setWorks(response.data.works);
             setMPage(response.data.pagecount);

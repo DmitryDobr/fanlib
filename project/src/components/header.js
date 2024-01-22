@@ -11,7 +11,7 @@ class Header extends Component {
         this.state = {
             head: 0,
             links: [
-                {id: 0, name: "Новые работы", destination: "works/new"},
+                {id: 0, name: "Обновленные работы", destination: "works/new"},
                 {id: 1, name: "Случайная работа", destination: "works/rand"},
                 {id: 2, name: "Завершенные", destination: "works/completed"},
                 {id: 3, name: "Поиск работ", destination: "works/search"},
@@ -36,7 +36,7 @@ class Header extends Component {
                     <div className='header-top-element' onMouseEnter={() => {
                         this.setState({
                             links: [
-                                {id: 0, name: "Новые работы", destination: "works/new"},
+                                {id: 0, name: "Обновленные работы", destination: "works/new"},
                                 {id: 1, name: "Случайная работа", destination: "works/rand"},
                                 {id: 2, name: "Завершенные", destination: "works/completed"},
                                 {id: 3, name: "Поиск работ", destination: "works/search"},
@@ -65,8 +65,8 @@ class Header extends Component {
                     <div className='header-top-element' onMouseEnter={() => {
                         this.setState({
                             links: [
-                                {id: 0, name: "Правила сайта", destination: "/"},
-                                {id: 1, name: "Правила размещения работ", destination: "/"}
+                                {id: 0, name: "Правила сайта", destination: "/rules"},
+                                {id: 1, name: "Правила размещения работ", destination: "/HowAddWork"}
                             ]
                         })
                     }}>FAQ</div>

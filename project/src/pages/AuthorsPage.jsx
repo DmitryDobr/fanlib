@@ -12,9 +12,7 @@ const AutorsPage = (props) => {
 
     useEffect(() => {
         axios
-        .post(`http://fanlib-api.ru/select/authors`,null,{params:{
-            'type': props.type,
-        }})
+        .get(`http://fanlib-api.ru/select/authors?type=${props.type}`,null,{params:{}})
         .then((response) => {
             setAuthors(response.data)
         })

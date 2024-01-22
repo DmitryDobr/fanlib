@@ -59,14 +59,15 @@ const EditWorkInfo = () => {
         const newRemark = form.remark.value;
         const newAbout = form.about.value;
 
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user.user_id);
+        bodyFormData.append('work_id', idWork);
+        bodyFormData.append('about', newAbout);
+        bodyFormData.append('name', newWorkName);
+        bodyFormData.append('remark', newRemark);
+
         axios
-        .post(`http://fanlib-api.ru/update/work`, null, {params: {
-            user_id: user.user_id,
-            work_id: idWork,
-            about: newAbout,
-            name: newWorkName,
-            remark: newRemark,
-        }})
+        .post(`http://fanlib-api.ru/update/work`, bodyFormData, {params: {}})
         .then((response) => {
             // console.log(response.data)
             alert(response.data.message)

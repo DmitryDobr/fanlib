@@ -38,6 +38,8 @@ import { UserCollectionsPage } from './pages/UserCollectionsPage';
 import { Collection } from './components/AuthorStudio/Collection';
 // страницы связанные с аккаунтом
 
+import { RulesPage } from './pages/RulesPage';
+import {HowAddWork} from './pages/HowAddWork';
 
 
 // провайдер авторизации
@@ -62,8 +64,8 @@ function App() {
 
                 {/* страницы отображения новых, популярных и рандомных авторов */}
                 <Route path="authors/new" element={<AutorsPage type="new"/>} />
-                <Route path="authors/popular" element={<AutorsPage type="popular"/>} />
-                <Route path="authors/random" element={<AutorsPage type="random"/>} />
+                {/* <Route path="authors/popular" element={<AutorsPage type="popular"/>} /> */}
+                {/* <Route path="authors/random" element={<AutorsPage type="random"/>} /> */}
 
                 
                 <Route path="author/:idAuthor" element={<AutorPage />} > {/* страница конкретного автора */}
@@ -117,6 +119,11 @@ function App() {
                 }>
                     <Route path=':idCollection' element={<Collection />}/>
                 </Route>
+
+                <Route path="rules" element={<RulesPage />} /> {/* страница правил */}
+                <Route path="HowAddWork" element={<HowAddWork />} /> {/* страница правил */}
+                    
+                
 
                 {/* л.другие страницы */}
                 <Route path="*" element={<Notfoundpage />} />

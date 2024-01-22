@@ -43,10 +43,10 @@ const AutorPage = () => {
 
     async function loadWorks () {
         axios
-        .post(`http://fanlib-api.ru/select/works`, null, {params: {
-            'user_id': idAuthor,
-            'type': 'byAuthor',
-            'page': current_page,
+        .get(`http://fanlib-api.ru/select/works?type=byAuthor&user_id=${idAuthor}&page=${current_page}`, null, {params: {
+            // 'user_id': idAuthor,
+            // 'type': 'byAuthor',
+            // 'page': current_page,
         }})
         .then((response) => {
             // setWorks(response);

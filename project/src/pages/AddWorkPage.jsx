@@ -2,16 +2,9 @@ import React from 'react'
 
 import axios, {isAxiosError} from 'axios'
 import { useState, useEffect } from "react"
-import { useRef } from 'react';
 
 import { useAuth } from '../hoc/useAuth'
 
-import { useParams } from 'react-router-dom';
-
-import { ControlledMenu, MenuDivider, MenuItem, useHover, useMenuState } from '@szhsin/react-menu';
-
-import '@szhsin/react-menu/dist/index.css';
-import '@szhsin/react-menu/dist/transitions/slide.css';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -67,12 +60,6 @@ const AddWorkPage = () => {
     async function AddNewWork(event) {
         event.preventDefault()
         const form = event.target
-
-        // console.log(selectedCharacters)
-        // console.log(selectFandoms)
-
-        // console.log(form.WorkName.value)
-        // console.log(form.about.value)
 
         const WorkName = form.WorkName.value
         const About = form.about.value

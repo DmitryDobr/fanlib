@@ -18,10 +18,7 @@ const ReadChapter = () => {
 
     useEffect(() => {
         axios
-        .post(`http://fanlib-api.ru/select/chapter`, null, {params: {
-            'WorkId': idWork,
-            'chapterId': idChapter
-        }})
+        .get(`http://fanlib-api.ru/select/chapter?WorkId=${idWork}&chapterId=${idChapter}`)
         .then((response) => {
             setChapter(response.data[0])
         })
