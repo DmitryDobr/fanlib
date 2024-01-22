@@ -71,6 +71,9 @@ function n_UpdateChapter($db, $params) {
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
+        $query = 'UPDATE "public"."WORK" SET "update_time" = $1 WHERE work_id = $2';
+        $result = pg_query_params($db, $query, array(date('j-m-y'), $params['work_id']));
+        
         if (empty($state)) {
             $result_list = ["status" => true,
                             "message" => "Update complete"];

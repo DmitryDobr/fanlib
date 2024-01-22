@@ -33,7 +33,7 @@
 
         return $data;
     }
-    
+
 	$method = $_SERVER['REQUEST_METHOD'];
     
     // Получаем данные из тела запроса
@@ -43,11 +43,10 @@
 	$params = explode('/' , $q);
 	
 	$type = $params[0];
-	
+	$querryType = $params[1];
+
 	$statusFlag = false;
 	
-
-    $querryType = $params[1];
     include_once './routers/' . $type . '.php';
     $statusFlag = route($db, $formData, $querryType);
 
