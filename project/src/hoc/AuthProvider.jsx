@@ -14,47 +14,33 @@ export const AuthProvider = ({children}) => {
 
     // передаем информацию о пользователе и функцию, которая должна переносить на др.страницу с заменой истории
     const signin = (newUser, newPass, callback) => {
-
+        var bodyFormData = new FormData();
+        bodyFormData.append('email', newUser);
+        bodyFormData.append('password', newPass);
+        
         axios
-            .post(`http://fanlib-api.ru/user/login`, null, { params: {
-                email: newUser,
-                password: newPass,
-            }})
-            .then((response) => {
-                
-                console.log(response.data);
+        .post(`http://fanlib-api.ru/user/login`, bodyFormData, { params: {}})
+        .then((response) => {
+            
+            console.log(response.data);
 
-                if (response.data.status) {
-                    setUser(response.data);
-                    callback();
-                    // alert("Залогинено");
-                }
-                else {
-                    setUser(null);
-                    // callback();
-                    alert("Ошибка авторизации");
-                }
-            })
-            .catch((error) => {
-                if (isAxiosError(error))
-                {
-                    console.log(error.response.data.message);
-                }
-            });
-
-
-        // if (newUser == "Lairochka")
-        // {
-        //     setUser(newUser);
-        //     callback();
-        //     alert("Залогинено");
-        // }
-        // else
-        // {
-        //     setUser(null);
-        //     // callback();
-        //     alert("Пользователь не найден");
-        // }
+            if (response.data.status) {
+                setUser(response.data);
+                callback();
+                // alert("Залогинено");
+            }
+            else {
+                setUser(null);
+                // callback();
+                alert("Ошибка авторизации");
+            }
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
+            }
+        });
     }
     // функция разлогинивания пользователя
     const signout = (callback) => {
@@ -66,13 +52,13 @@ export const AuthProvider = ({children}) => {
     // функция для регистрации пользователя
     const registrate = (email,password,username,callback) => {
         // console.log(email,password,username);
+        var bodyFormData = new FormData();
+        bodyFormData.append('email', email);
+        bodyFormData.append('password', password);
+        bodyFormData.append('nickname', username);
 
         axios
-        .post(`http://fanlib-api.ru/user/register`, null, { params: {
-            email: email,
-            password: password,
-            nickname: username,
-        }})
+        .post(`http://fanlib-api.ru/user/register`, bodyFormData, { params: {}})
         .then((response) => {
             
             console.log(response.data);

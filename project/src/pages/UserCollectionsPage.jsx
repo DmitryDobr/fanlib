@@ -51,7 +51,7 @@ const UserCollectionsPage = () => {
         .then((response) => {
             // console.log(response.data);
             alert(response.data.message)
-
+            form.CollectionName.value = "";
             if (response.data.status === true)
             {
                 loadCollections();
@@ -63,6 +63,32 @@ const UserCollectionsPage = () => {
             {
                 // console.log(error.response.data);
                 alert(error.response.data.message)
+            }
+        });
+    }
+
+    // удаление коллекции
+    async function delCollection(id) {
+        // console.log(id)
+
+        axios
+        .post(`http://fanlib-api.ru/delete/collection`, null, {params: {
+            'user_id': user.user_id,
+            'collection_id': id
+        }})
+        .then((response) => {
+            // setCollections(response.data);
+            alert(response.data.message)
+
+            if (response.data.status === true)
+            {
+                loadCollections();
+            }
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
             }
         });
     }
@@ -80,7 +106,7 @@ const UserCollectionsPage = () => {
                                     <Link className='collection-link' to={`./${el.id}`}>{el.name}</Link>
                                     <span className='collection-text'> ({el.count})</span>
                                 </span>
-                                <span className='collection-text delete-collection'> Удалить</span>
+                                <span className='collection-text delete-collection' onClick={() => {delCollection(el.id)}}> Удалить</span>
                             </div>
                         ))
                     }
