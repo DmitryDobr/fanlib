@@ -53,7 +53,7 @@ function n_AddChapter($db, $params) {
         $result = pg_query($db, 'SELECT chapter_id FROM "public"."CHAPTER" ORDER BY chapter_id DESC LIMIT 1');
         $new_id = pg_fetch_assoc($result)['chapter_id'] + 1;
 
-        $result = pg_query($db, 'SELECT max(chapter_number) as mx FROM "public"."CHAPTER" WHERE work_id='.$params['work_id']);
+        $result = pg_query_params($db, 'SELECT max(chapter_number) as mx FROM "public"."CHAPTER" WHERE work_id=$1',array($params['work_id']));
         $new_number = pg_fetch_assoc($result)['mx'] + 1;
 
         $querry = 'INSERT INTO "public"."CHAPTER" (chapter_id, work_id, chapter_name, chapter_number) VALUES ($1, $2, $3, $4)';
@@ -233,7 +233,33 @@ function n_AddWork($db, $params) {
             echo json_encode($result_list);
         } 
     }
+}
+
+// добавление новой коллекции
+function n_AddCollection($db, $params) {
+    $UserId = $params['user_id'];
+    $name = $params['name'];
+
+    $result = pg_query($db, 'SELECT max("collection_id") as max FROM "public"."COLLECTION"');
+    $new_id = pg_fetch_assoc($result)['max'] + 1; // объявление нового id для коллекции
+
+    $querry = 'INSERT INTO "public"."COLLECTION" (collection_id, id_user, name) VALUES ($1, $2, $3)';
     
+    $result = pg_query_params($db, $querry, array($new_id, $UserId, $name));
+
+
+    $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
+
+    if (empty($state)) {
+        $result_list = ["status" => true,
+                        "message" => "Add collection complete"];
+        echo json_encode($result_list);
+    }
+    else {
+        $result_list = ["status" => false,
+                        "Message" => $state];
+        echo json_encode($result_list);
+    }
 }
 
 // добавление работы в коллекцию
@@ -244,16 +270,16 @@ function n_AddWorkCollection($db, $params) {
     $collection_id  = $params['collection_id'];
     $work_id        = $params['work_id'];
 
-    $querry = 'SELECT collection_id as id FROM "public"."COLLECTION" WHERE id_user = '.$user_id.' AND collection_id ='.$collection_id.'';
-    $result = pg_query($db, $querry);
+    $querry = 'SELECT collection_id as id FROM "public"."COLLECTION" WHERE id_user = $1 AND collection_id = $2';
+    $result = pg_query_params($db, $querry, array($user_id, $collection_id));
 
     if (pg_num_rows(($result)) == 1) { // пользователь и коллекция связаны
 
-        $querry = 'SELECT id_collection as id FROM "public"."COLLECTION-TO-WORK" WHERE id_collection ='.$collection_id.' AND work_id='.$work_id.'';
-        $result = pg_query($db, $querry);
-
-        if (pg_num_rows(($result)) == 0) // работа и коллекция не связаны => можно добавить работу в коллекцию
-        {
+        $querry = 'SELECT id_collection as id FROM "public"."COLLECTION-TO-WORK" WHERE id_collection = $1 AND work_id= $2';
+        $result = pg_query_params($db, $querry, array($collection_id, $work_id));
+        
+        // работа и коллекция не связаны => можно добавить работу в коллекцию
+        if (pg_num_rows(($result)) == 0) {
             $result = pg_query($db, 'SELECT max("COLL_WORK_id") as max FROM "public"."COLLECTION-TO-WORK"');
             $new_id = pg_fetch_assoc($result)['max'] + 1;
             
@@ -285,6 +311,7 @@ $insertFunctions = [
     'chapter' => 'n_AddChapter',
     'work' => 'n_AddWork',
     'workcollection' => 'n_AddWorkCollection',
+    'collection' => 'n_AddCollection',
 ];
 
 function route($db, $params, $key) {

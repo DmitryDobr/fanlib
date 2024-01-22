@@ -62,6 +62,8 @@ function n_UpdateChapter($db, $params) {
 
     $text = json_decode(file_get_contents('php://input'), true)[0]["chapter_text"];
     // echo file_get_contents('php://input');
+    
+    // echo $_POST['user_id'];
 
     if (n_CheckWorkAuthor($db, $params['user_id'], $params['work_id'])) {
         $querry = 'UPDATE "public"."CHAPTER" SET "chapter_text" = $1, "chapter_name" = $2, "chapter_number" = $3 WHERE "chapter_id" = '.$params['chapter_id'].'';
@@ -69,6 +71,9 @@ function n_UpdateChapter($db, $params) {
 
         $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
 
+        $query = 'UPDATE "public"."WORK" SET "update_time" = $1 WHERE work_id = $2';
+        $result = pg_query_params($db, $query, array(date('j-m-y'), $params['work_id']));
+        
         if (empty($state)) {
             $result_list = ["status" => true,
                             "message" => "Update complete"];
