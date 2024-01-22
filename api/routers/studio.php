@@ -254,7 +254,6 @@ function n_CollectionWorks($db, $params) {
 function n_getAllWorks($db, $params) {
     $UserID = $params['user_id'];
 
-
     $querry = 'SELECT work_id FROM "public"."WORK" WHERE user_id = $1 ORDER BY work_id DESC';
     $result = pg_query_params($db, $querry, array($UserID));
 
@@ -262,6 +261,7 @@ function n_getAllWorks($db, $params) {
 
     if (pg_num_rows($result) > 0) {
         $result_list = [];
+
         while ($answer = pg_fetch_assoc($result)) {
             $result_list[] = $answer;
         }
