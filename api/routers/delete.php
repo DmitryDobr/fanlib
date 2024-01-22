@@ -80,10 +80,33 @@ function n_DeleteWCollection($db, $params) {
     }
 }
 
+// удаление коллекции из бд
+function n_DeleteCollection($db, $params) {
+    $UserId = $params['user_id'];
+    $CollectionId = $params['collection_id'];
+
+    $querry = 'DELETE FROM "public"."COLLECTION" WHERE id_user = $1 AND collection_id = $2;';
+    $result = pg_query_params($db, $querry, array($UserId, $CollectionId));
+
+    $state = pg_result_error($result);  //  отлов ошибок выполнения запроса
+
+    if (empty($state)) {
+        $result_list = ["status" => true,
+                        "message" => "Delete complete"];
+        echo json_encode($result_list);
+    }
+    else {
+        $result_list = ["status" => false,
+                        "message" => $state];
+        echo json_encode($result_list);
+    }
+}
+
 $deleteFunctions = [
     'work' => 'n_DeleteWork',
     'chapter' => 'n_DeleteChapter',
     'workCollection' => 'n_DeleteWCollection',
+    'collection' => 'n_DeleteCollection',
 ];
 
 function route($db, $params, $key) {

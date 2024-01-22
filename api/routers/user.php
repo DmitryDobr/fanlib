@@ -171,6 +171,7 @@ $loginFunctions = [
 
 
 function route($db, $params, $key) {
+
     global $loginFunctions;
     if (array_key_exists($key, $loginFunctions)){
         $loginFunctions[$key]($db, $params);
