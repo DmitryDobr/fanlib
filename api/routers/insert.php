@@ -233,7 +233,6 @@ function n_AddWork($db, $params) {
             echo json_encode($result_list);
         } 
     }
-    
 }
 
 // добавление новой коллекции

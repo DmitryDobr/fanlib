@@ -1,0 +1,7 @@
+.Fandom-About {
+    background-color: rgb(201,196,206);
+    padding: 0px 30px 50px 30px ;
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}

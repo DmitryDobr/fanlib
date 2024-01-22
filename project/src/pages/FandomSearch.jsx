@@ -32,13 +32,13 @@ const FandomSearch = () => {
         if (fandomQuerry !== '')
         {
             axios
-            .post(`http://fanlib-api.ru/fandom/search`, null, { params: {
+            .post(`http://fanlib-api.ru/search/fandom`, null, { params: {
                 name: fandomQuerry,
             }})
             .then((response) => {
                 setFandoms([]);
                 setFandoms(response.data);
-                // console.log(response.data);
+                console.log(response.data);
             })
             .catch((error) => {
                 if (isAxiosError(error))

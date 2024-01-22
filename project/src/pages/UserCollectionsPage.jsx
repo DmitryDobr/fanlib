@@ -16,6 +16,7 @@ const UserCollectionsPage = () => {
 
     useEffect(() => loadCollections,[user.user_id, outlet])
 
+    // прогрузка коллекций работ
     async function loadCollections() {
         axios
         .post(`http://fanlib-api.ru/studio/collections`, null, {params: {
@@ -24,6 +25,65 @@ const UserCollectionsPage = () => {
         .then((response) => {
             setCollections(response.data);
             // console.log(response.data)
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                console.log(error.response.data.message);
+            }
+        });
+    }
+
+    // добавление коллекции
+    async function addCollection(event) {
+        event.preventDefault()
+        const form = event.target
+
+        const CollName = form.CollectionName.value // название новой коллекции
+        const userId = user.user_id // id пользователя
+
+        axios
+        .post(`http://fanlib-api.ru/insert/collection`, null, {params: {
+            user_id: userId ,
+            name: CollName,
+        }
+        })
+        .then((response) => {
+            // console.log(response.data);
+            alert(response.data.message)
+            form.CollectionName.value = "";
+            if (response.data.status === true)
+            {
+                loadCollections();
+            }
+        })
+        .catch((error) => {
+            console.log(error)
+            if (isAxiosError)
+            {
+                // console.log(error.response.data);
+                alert(error.response.data.message)
+            }
+        });
+    }
+
+    // удаление коллекции
+    async function delCollection(id) {
+        // console.log(id)
+
+        axios
+        .post(`http://fanlib-api.ru/delete/collection`, null, {params: {
+            'user_id': user.user_id,
+            'collection_id': id
+        }})
+        .then((response) => {
+            // setCollections(response.data);
+            alert(response.data.message)
+
+            if (response.data.status === true)
+            {
+                loadCollections();
+            }
         })
         .catch((error) => {
             if (isAxiosError(error))
@@ -46,11 +106,15 @@ const UserCollectionsPage = () => {
                                     <Link className='collection-link' to={`./${el.id}`}>{el.name}</Link>
                                     <span className='collection-text'> ({el.count})</span>
                                 </span>
-                                <span className='collection-text delete-collection'> Удалить</span>
+                                <span className='collection-text delete-collection' onClick={() => {delCollection(el.id)}}> Удалить</span>
                             </div>
                         ))
                     }
                 </div>
+                <form className='EditForm' onSubmit={addCollection}>
+                    <input className='EditForm-text' name="CollectionName" placeholder='Название новой коллекции'></input>
+                    <input className='LoginForm-button' type='submit' value={'Создать'}></input>
+                </form>
             </div>
         )
     }

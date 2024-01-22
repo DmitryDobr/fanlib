@@ -20,18 +20,20 @@ const FandomPage = () => {
 
     useEffect(() => {
         axios
-            .get(`http://fanlib-api.ru/fandom/one/${idFandom}`)
-            .then((response) => {
-                setFandom(response.data[0]);
-                // console.log(response.data[0]);
-            })
-            .catch((error) => {
-                if (isAxiosError(error))
-                {
-                    setFandom(error.response.data);
-                    // console.log(error.response.data.message);
-                }
-            });
+        .post(`http://fanlib-api.ru/select/fandom`, null, {params:{
+            'FandomId': idFandom,
+        }})
+        .then((response) => {
+            setFandom(response.data[0]);
+            // console.log(response.data[0]);
+        })
+        .catch((error) => {
+            if (isAxiosError(error))
+            {
+                setFandom(error.response.data);
+                // console.log(error.response.data.message);
+            }
+        });
     }, [idFandom]);
 
     // console.log(fandom)

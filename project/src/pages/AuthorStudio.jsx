@@ -19,13 +19,12 @@ const AuthorStudio = () => {
 
     let [works, setWorks] = useState([]);
 
-
     useEffect(() => {loadWorks(user.user_id)}, [user.user_id]);
 
+    // прогрузка работ автора
     async function loadWorks(user_id) {
-        
         axios
-        .post(`http://fanlib-api.ru/AuthorWorks/last`, null, {params: {
+        .post(`http://fanlib-api.ru/studio/allworks`, null, {params: {
             'user_id': user_id,
         }})
         .then((response) => {
@@ -40,6 +39,7 @@ const AuthorStudio = () => {
         });
     }
 
+    // удаление работы автора
     async function deleteWork(event) {
         event.preventDefault();
         const elem = event.target;

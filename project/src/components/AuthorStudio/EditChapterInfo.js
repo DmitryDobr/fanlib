@@ -17,6 +17,7 @@ const EditChapterInfo = (props) => {
 
     let [chapterObject, setChapter] = useState([]);
     useEffect(() => {loadChapter(props.WorkId)}, [props])
+    
     async function loadChapter() {
         axios
         .post(`http://fanlib-api.ru/studio/chapter`, null, {params: {
@@ -45,6 +46,7 @@ const EditChapterInfo = (props) => {
 
         const newChapterName = form.chapter_name.value;
         const newChapterText = form.chapter_text.value;
+        const newChapterNumber = form.chapter_number.value;
 
         axios
         .post(`http://fanlib-api.ru/update/chapter`, [{chapter_text: newChapterText,}], {params: {
@@ -52,6 +54,7 @@ const EditChapterInfo = (props) => {
             work_id: idWork,
             chapter_id: idChapter,
             chapter_name: newChapterName,
+            chapter_number: newChapterNumber
         }
         })
         .then((response) => {
